@@ -1,0 +1,811 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>嵌入式 | 笔记</title><meta name="author" content="YiMing Pan"><meta name="copyright" content="YiMing Pan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="STM32STM32启动文件讲解 一张图看懂内存(RAM，ROM，FLASH)及辅助内存之间的关系 通信协议SPI（串行外设接口）一文搞懂SPI通信协议 - 知乎 (zhihu.com) 1.简介 速率不固定能达到50Mbps、全双工、同步  MISO（ Master Input Slave Output）：主设备数据输入，从设备数据输出； MOSI（Master Output Slave Inp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式">
+<meta property="og:url" content="http://example.com/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/index.html">
+<meta property="og:site_name" content="笔记">
+<meta property="og:description" content="STM32STM32启动文件讲解 一张图看懂内存(RAM，ROM，FLASH)及辅助内存之间的关系 通信协议SPI（串行外设接口）一文搞懂SPI通信协议 - 知乎 (zhihu.com) 1.简介 速率不固定能达到50Mbps、全双工、同步  MISO（ Master Input Slave Output）：主设备数据输入，从设备数据输出； MOSI（Master Output Slave Inp">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-08-17T11:49:11.000Z">
+<meta property="article:modified_time" content="2023-08-17T12:01:46.443Z">
+<meta property="article:author" content="YiMing Pan">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '嵌入式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-17 20:01:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="笔记"><span class="site-name">笔记</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">嵌入式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-17T11:49:11.000Z" title="发表于 2023-08-17 19:49:11">2023-08-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-17T12:01:46.443Z" title="更新于 2023-08-17 20:01:46">2023-08-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="嵌入式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="STM32"><a href="#STM32" class="headerlink" title="STM32"></a>STM32</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/XYJ_Tiger/article/details/124786646">STM32启动文件讲解</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/c413969814/article/details/130812223">一张图看懂内存(RAM，ROM，FLASH)及辅助内存之间的关系</a></p>
+<h1 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h1><h2 id="SPI（串行外设接口）"><a href="#SPI（串行外设接口）" class="headerlink" title="SPI（串行外设接口）"></a>SPI（串行外设接口）</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/503777954">一文搞懂SPI通信协议 - 知乎 (zhihu.com)</a></p>
+<p><strong>1.简介</strong></p>
+<p><strong>速率不固定能达到50Mbps、全双工、同步</strong></p>
+<ul>
+<li>MISO（ Master Input Slave Output）：主设备数据输入，从设备数据输出；</li>
+<li>MOSI（Master Output Slave Input）：主设备数据输出，从设备数据输入；</li>
+<li>SCLK（Serial Clock）：时钟信号，由主设备产生；</li>
+<li>CS&#x2F;SS（Chip Select&#x2F;Slave Select）：从设备使能信号，由主设备控制，一主多从时，CS&#x2F;SS是从芯片是否被主芯片选中的控制信号，只有片选信号为预先规定的使能信号时（高电位或低电位），主芯片对此从芯片的操作才有效。</li>
+</ul>
+<p><strong>2.通信原理</strong></p>
+<p>SPI数据通信的流程可以分为以下几步：</p>
+<p>1、主设备发起信号，将CS&#x2F;SS拉低，启动通信。</p>
+<p>2、主设备通过发送时钟信号，来告诉从设备进行写数据或者读数据操作，它将立即读取数据线上的信号，这样就得到了一位数据（1bit）。</p>
+<p>3、主机（Master）将要发送的数据写到发送数据缓存区（Menory），缓存区经过移位寄存器（缓存长度不一定，看单片机配置），串行移位寄存器通过MOSI信号线将字节一位一位的移出去传送给从机，同时MISO接口接收到的数据经过移位寄存器一位一位的移到接收缓存区。</p>
+<p>4、从机（Slave）也将自己的串行移位寄存器（缓存长度不一定，看单片机配置）中的内容通过MISO信号线返回给主机。同时通过MOSI信号线接收主机发送的数据，这样，两个移位寄存器中的内容就被交换。</p>
+<p>例如，下图示例中简单模拟SPI通信流程，主机拉低NSS片选信号，启动通信，并且产生时钟信号，上升沿触发边沿信号，主机在MOSI线路<strong>一位一位</strong>发送数据0X53，在MISO线路<strong>一位一位</strong>接收数据0X46，如下图所示：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-53ee90e0b05361234a5d56a5294dcfbc_720w.webp" alt="img"></p>
+<p><strong>3、通信特性</strong></p>
+<p><strong>四种模式</strong></p>
+<ul>
+<li>Mode0：CKP&#x3D;0，CKE &#x3D;0：当空闲态时，SCK处于低电平，数据采样是在第1个边沿，也就是SCK由低电平到高电平的跳变，所以数据采样是在上升沿（准备数据），（发送数据）数据发送是在下降沿。</li>
+<li>Mode1：CKP&#x3D;0，CKE&#x3D;1：当空闲态时，SCK处于低电平，数据发送是在第2个边沿，也就是SCK由低电平到高电平的跳变，所以数据采样是在下降沿，数据发送是在上升沿。</li>
+<li>Mode2：CKP&#x3D;1，CKE&#x3D;0：当空闲态时，SCK处于高电平，数据采集是在第1个边沿，也就是SCK由高电平到低电平的跳变，所以数据采集是在下降沿，数据发送是在上升沿。</li>
+<li>Mode3：CKP&#x3D;1，CKE&#x3D;1：当空闲态时，SCK处于高电平，数据发送是在第2个边沿，也就是SCK由高电平到低电平的跳变，所以数据采集是在上升沿，数据发送是在下降沿。</li>
+</ul>
+<p><img src="https://pic4.zhimg.com/80/v2-fbb0aacf1981e1391adb05d96d2bd7e3_720w.webp" alt="img"></p>
+<p>黑线为采样数据的时刻，蓝线为SCK时钟信号</p>
+<p>举个例子，下图是SPI Mode0读&#x2F;写时序，可以看出SCK空闲状态为低电平，主机数据在第一个跳变沿被从机采样，数据输出同理。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-04ac8a977e0d7747469404c615d9b931_720w.webp" alt="img"></p>
+<p><strong>4.IO模拟</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;wiringPi.h&gt;</span><br><span class="line"> </span><br><span class="line">#define SPI_CLK  11   // GPIO17</span><br><span class="line">#define SPI_MISO 9    // GPIO18</span><br><span class="line">#define SPI_MOSI 10   // GPIO19</span><br><span class="line">#define SPI_CS   8    // GPIO20</span><br><span class="line"> </span><br><span class="line">void spi_init(void)</span><br><span class="line">&#123;</span><br><span class="line">    wiringPiSetup();</span><br><span class="line">    pinMode(SPI_CLK,  OUTPUT);</span><br><span class="line">    pinMode(SPI_MISO, INPUT);</span><br><span class="line">    pinMode(SPI_MOSI, OUTPUT);</span><br><span class="line">    pinMode(SPI_CS,   OUTPUT);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">void spi_write(unsigned char data)</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    digitalWrite(SPI_CS, LOW);</span><br><span class="line">    for(i=7; i&gt;=0; i--) &#123;</span><br><span class="line">        digitalWrite(SPI_CLK, LOW);</span><br><span class="line">        if(data &amp; (1&lt;&lt;i))</span><br><span class="line">            digitalWrite(SPI_MOSI, HIGH);</span><br><span class="line">        else</span><br><span class="line">            digitalWrite(SPI_MOSI, LOW);</span><br><span class="line">        digitalWrite(SPI_CLK, HIGH);</span><br><span class="line">    &#125;</span><br><span class="line">    digitalWrite(SPI_CS, HIGH);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">unsigned char spi_read(void)</span><br><span class="line">&#123;</span><br><span class="line">    unsigned char data = 0;</span><br><span class="line">    int i;</span><br><span class="line">    digitalWrite(SPI_CS, LOW);</span><br><span class="line">    for(i=7; i&gt;=0; i--) &#123;</span><br><span class="line">        digitalWrite(SPI_CLK, HIGH);</span><br><span class="line">        if(digitalRead(SPI_MISO))</span><br><span class="line">            data |= (1&lt;&lt;i);</span><br><span class="line">        digitalWrite(SPI_CLK, LOW);</span><br><span class="line">    &#125;</span><br><span class="line">    digitalWrite(SPI_CS, HIGH);</span><br><span class="line">    return data;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    spi_init();</span><br><span class="line"> </span><br><span class="line">    // 发送数据</span><br><span class="line">    spi_write(0x55);</span><br><span class="line"> </span><br><span class="line">    // 读取数据</span><br><span class="line">    unsigned char data = spi_read();</span><br><span class="line">    printf(&quot;Received data: %#x\n&quot;, data);</span><br><span class="line"> </span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="I2C（串行通信协议）"><a href="#I2C（串行通信协议）" class="headerlink" title="I2C（串行通信协议）"></a>I2C（串行通信协议）</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/353214259">【通信协议】I2C通信协议 - 知乎 (zhihu.com)</a></p>
+<p><strong>标准100kbps、快速400kbps、高速3.4Mbps、超高速5Mbit&#x2F;s、半双工、同步</strong></p>
+<p>设备空闲时上拉电阻的阻值大小2.2kΩ 到 10kΩ 之间</p>
+<p><strong>1.简介</strong></p>
+<p>***SDA*(Serial Data)**– 数据线。</p>
+<p>***SCL*(Serial Clock)**– 时钟线。</p>
+<p><strong>2.工作原理</strong></p>
+<p><img src="https://pic1.zhimg.com/80/v2-baf88c70a9d5f9afc4f292d9bfb232d4_720w.webp" alt="img"></p>
+<p><strong>启动条件：</strong>当SCL是高电平时，SDA从高电平向低电平切换。</p>
+<p><strong>停止条件：</strong>当SCL是高电平时，SDA由低电平向高电平切换。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-b49f4dee08f4273545450b322d798694_720w.webp" alt="img"></p>
+<p><strong>地址帧：</strong>每个从属设备唯一的7位或10位序列，用于主从设备之间的地址识别。</p>
+<p><strong>读&#x2F;写位：</strong>一位，如果主机是向从机发送数据则为低电平，请求数据则为高电平。</p>
+<p><strong>ACK&#x2F;NACK：</strong>消息中的每个帧后均带有一个ACK&#x2F;NACK位。如果成功接收到地址帧或数据帧，接收设备会返回一个ACK位用于表示确认。</p>
+<p><strong>3.IO模拟</strong></p>
+<p>主机：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 写一个字节到总线</span><br><span class="line"> * @param self: 对象实例指针</span><br><span class="line"> * @param value: 写到总线的数据</span><br><span class="line"> * @return 从机应答这个Byte,返回True,否则返回False</span><br><span class="line"> */</span><br><span class="line">static Bool TIdpIicCiu98dWriteByte(TIdpIicCiu98d *self, UInt8 value)</span><br><span class="line">&#123;</span><br><span class="line">    Bool result;</span><br><span class="line"></span><br><span class="line">    // 发送高7bit</span><br><span class="line">    for (Int32 i = 7; i &gt; 0; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        self-&gt;OnSetDataPin(self-&gt;user_data, value &amp; (1 &lt;&lt; i));</span><br><span class="line"></span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 发送最低bit</span><br><span class="line">    self-&gt;OnSetDataPin(self-&gt;user_data, value &amp; 1);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, False); // 准备输入,故Data引脚提早变成输入</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    // 读取应答</span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    result = !self-&gt;OnGetDataPin(self-&gt;user_data); </span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, True); // 准备输出,故Data引脚提早变成输出</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 从IIC总线上读取一个字节</span><br><span class="line"> * @param self: 对象实例指针</span><br><span class="line"> * @param ack: 读取完成后是否进行应答</span><br><span class="line"> * @return 读取到的数据</span><br><span class="line"> */</span><br><span class="line">static UInt8 TIdpIicCiu98dReadByte(TIdpIicCiu98d *self, Bool ack)</span><br><span class="line">&#123;</span><br><span class="line">    UInt8 result = 0;</span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, False); // 准备输入,故Data引脚提早变成输入</span><br><span class="line">    // 读取高Bit7..Bit1</span><br><span class="line">    for (Int32 i = 7; i &gt; 0; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line">        result |= (self-&gt;OnGetDataPin(self-&gt;user_data) ? 1 : 0) &lt;&lt; i;</span><br><span class="line"></span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 读取最低Bit</span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line">    result |= (self-&gt;OnGetDataPin(self-&gt;user_data) ? 1 : 0);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">    </span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, True); // 准备输出,故Data引脚提早变成输出</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetDataPin(self-&gt;user_data, !ack);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    // 发送ACK位</span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Int32 TIdpIicCiu98dWrite(TIdpIicCiu98d *self, UInt8 slave_addr, const void *data, Int32 size)</span><br><span class="line">&#123;</span><br><span class="line">    Int32 result = kIdpEnumIicErrorCodeParam;</span><br><span class="line"></span><br><span class="line">    if (self != NULL &amp;&amp; data != NULL &amp;&amp; size &gt; 0) &#123;</span><br><span class="line">        TIdpIicCiu98dDoStart(self);</span><br><span class="line"></span><br><span class="line">        if (!TIdpIicCiu98dWriteByte(self, slave_addr &lt;&lt; 1))</span><br><span class="line">            result = kIdpEnumIicErrorCodeNak;</span><br><span class="line">        else&#123;</span><br><span class="line">            const UInt8 *p = (const UInt8 *)data;</span><br><span class="line">            Int32 write_size = size;</span><br><span class="line"></span><br><span class="line">            while (write_size &gt; 0 &amp;&amp; TIdpIicCiu98dWriteByte(self, *p))&#123;</span><br><span class="line">                write_size--;</span><br><span class="line">                p++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            result = write_size == 0 ? size : kIdpEnumIicErrorCodeNak;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TIdpIicCiu98dDoStop(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Int32 TIdpIicCiu98dRead(TIdpIicCiu98d *self, UInt8 slave_addr, void *buf, Int32 size)</span><br><span class="line">&#123;</span><br><span class="line">    Int32 result = kIdpEnumIicErrorCodeParam;</span><br><span class="line"></span><br><span class="line">    if (self != NULL &amp;&amp; buf != NULL &amp;&amp; size &gt; 0) &#123;</span><br><span class="line">        TIdpIicCiu98dDoStart(self);</span><br><span class="line"></span><br><span class="line">        if (!TIdpIicCiu98dWriteByte(self, (slave_addr &lt;&lt; 1) | 1))</span><br><span class="line">            result = kIdpEnumIicErrorCodeNak;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            UInt8 *p = (UInt8 *)buf;</span><br><span class="line">            Int32 read_size = size;</span><br><span class="line"></span><br><span class="line">            read_size--;  // 最后一个字节单独读取</span><br><span class="line">            while (read_size &gt; 0)&#123;</span><br><span class="line">                *p = TIdpIicCiu98dReadByte(self, True);</span><br><span class="line">                p++;</span><br><span class="line">                read_size--;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            *p = TIdpIicCiu98dReadByte(self, False);</span><br><span class="line"></span><br><span class="line">            result = size;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TIdpIicCiu98dDoStop(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从机：（缺少应答）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">/*-------------------------------------------------</span><br><span class="line"> *  函数名：IICSlaver_Send_Byte</span><br><span class="line"> *	功能：  IICSlaver发送一个字节</span><br><span class="line"> *  输入：  写入要发送的一个人字节数据txd</span><br><span class="line"> *  输出：  无</span><br><span class="line"> --------------------------------------------------*/		  </span><br><span class="line">void IICSlaver_Send_Byte(uint8_t txd)</span><br><span class="line">&#123;                        </span><br><span class="line">    uint8_t i;   </span><br><span class="line">	for(i = 0; i &lt; 8; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        WAIT_IIC_SCL_LOW;				//低电平准备数据</span><br><span class="line">        if ( txd &amp; 0x80 )</span><br><span class="line">            IICSlaver_SDA = 1;   </span><br><span class="line">        else    </span><br><span class="line">            IICSlaver_SDA = 0;  </span><br><span class="line">        SDA_OUT;</span><br><span class="line">        txd &lt;&lt;= 1;    </span><br><span class="line">        WAIT_IIC_SCL_HIGH;   </span><br><span class="line">    &#125;</span><br><span class="line">    WAIT_IIC_SCL_LOW;                  //低电平变回输入引脚                             </span><br><span class="line">    SDA_IN;</span><br><span class="line">    WAIT_IIC_SCL_HIGH;</span><br><span class="line">&#125; 	    </span><br><span class="line">/*-------------------------------------------------</span><br><span class="line"> *  函数名：IICSlaver_Read_Byte</span><br><span class="line"> *	功能：  IICSlaver读一个字节</span><br><span class="line"> *  输入：  无</span><br><span class="line"> *  输出：  读出存储器里面的数据并返回receive</span><br><span class="line"> --------------------------------------------------*/</span><br><span class="line">uint8_t IICSlaver_Read_Byte(void)</span><br><span class="line">&#123;</span><br><span class="line">	uint8_t i,receive=0;</span><br><span class="line">	for(i = 0; i &lt; 8; i ++)</span><br><span class="line">	&#123;</span><br><span class="line">		WAIT_IIC_SCL_LOW;                   </span><br><span class="line">		WAIT_IIC_SCL_HIGH;</span><br><span class="line">		receive &lt;&lt;= 1;  //先移位，再读数</span><br><span class="line">		if(IICSlaver_SDA)</span><br><span class="line">			receive |= 0x01;</span><br><span class="line">		else</span><br><span class="line">			receive |= 0x00;</span><br><span class="line">	&#125;</span><br><span class="line">    return receive;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="I2S（数字音频接口）"><a href="#I2S（数字音频接口）" class="headerlink" title="I2S（数字音频接口）"></a>I2S（数字音频接口）</h2><p>全双工&#x2F;半双工、主从结构、同步</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Q_Lee/article/details/131217760">数字音频接口—I2S总线协议</a></p>
+<p><img src="https://img-blog.csdnimg.cn/192beec3e7ee4541910b855c6eb6f997.png" alt="img"></p>
+<ul>
+<li>时钟线（SCK）：SCK线提供了同步音频数据传输的时钟信号。它确定了数据传输的速度和时序。</li>
+<li>左&#x2F;右声道线（WS）：WS线指示了当前传输的是左声道还是右声道的音频数据。它也被称为帧同步信号。</li>
+<li>数据线（SD）：SD线用于传输实际的音频数据。数据的位宽可以根据具体应用而变化，通常是16位或32位。</li>
+</ul>
+<h2 id="UART（通用异步收发传输器）"><a href="#UART（通用异步收发传输器）" class="headerlink" title="UART（通用异步收发传输器）"></a>UART（<strong>通用异步收发传输器</strong>）</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/576982851">详解串口通信UART - 知乎 (zhihu.com)</a></p>
+<p><strong>标准波特率是 4800 bps、9600 bps、19200 bps、115200 bps 等、全双工、异步</strong></p>
+<p><strong>1.简介</strong></p>
+<p>UART是通用异步收发器（异步串行通信口）的英文缩写，它包括了RS232、RS449、RS423、RS422和RS485等接口标准规范和总线标准规范，即UART是异步串行通信口的总称。</p>
+<p><strong>2.工作原理</strong></p>
+<p><img src="https://pic1.zhimg.com/80/v2-37ddc676f11b5c3f8b9efac608ea079c_720w.webp" alt="img"></p>
+<p>UART 串行通信中的数据被组织成称为数据包或帧的块。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-95cb87a6179927648d07109dbb7f6ec8_720w.webp" alt="img"></p>
+<p>大部分应用都是先传最低位的数据比特（the least significant data bit），但也有例外（如IBM 2741（英语：IBM 2741）打印终端）。</p>
+<p>典型 UART 数据包的结构或数据的标准帧如下图所示。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-40ce38f374eb899553bb03a2014ae4cc_720w.webp" alt="img"></p>
+<p><strong>起始位：</strong>起始位是在实际数据之前添加的同步位。起始位标记数据包的开始。通常，空闲数据线，即当数据传输线不传输任何数据时，它保持在高电压电平（1）。</p>
+<p>为了开始数据传输，发送 UART 将数据线从高电平拉到低电平（从 1 到 0）。接收 UART 在数据线上检测到这种从高到低的变化，并开始读取实际数据。通常，只有一个起始位。</p>
+<p><strong>停止位：</strong>停止位，顾名思义，标志着数据包的结束。它通常有两位长，但通常只使用一个位。为了结束传输，UART 将数据线保持在高电压 (1)。</p>
+<p><strong>奇偶校验位：</strong>奇偶校验允许接收器检查接收到的数据是否正确。Parity 是一个低级错误检查系统，有两种类型：偶校验和奇校验。奇偶校验位是可选的，实际上它并没有被广泛使用。</p>
+<p><strong>数据位：</strong>数据位是从发送方传输到接收方的实际数据。数据帧的长度可以在 5 到 9 之间（如果不使用奇偶校验，则为 9 位，如果使用奇偶校验，则只有 8 位）。通常，LSB 是要传输的数据的第一位（除非另有说明）。</p>
+<p><strong>3.通信规则</strong></p>
+<p>规则包括：</p>
+<ul>
+<li>同步位（开始位和停止位）</li>
+<li>奇偶校验位</li>
+<li>数据位和</li>
+<li>波特率</li>
+</ul>
+<p><strong>波特率：</strong>使用波特率提到数据传输的速度。发送 UART 和接收 UART 必须在波特率上达成一致才能成功传输数据。波特率以每秒位数为单位。一些标准波特率是 4800 bps、9600 bps、19200 bps、115200 bps 等。其中 9600 bps 波特率是最常用的一种。</p>
+<h3 id="UART、RS232、RS485之间的关系"><a href="#UART、RS232、RS485之间的关系" class="headerlink" title="UART、RS232、RS485之间的关系"></a><strong>UART、RS232、RS485之间的关系</strong></h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42031299/article/details/128990256">UART和RS232、RS485的联系和区别、以及对软件编程的影响_rs232和rs485的联系</a></p>
+<p>RS232传输距离有限，最大传输距离标准值为15米，且只能点对点通讯，最大传输速率最大为20KB&#x2F;s。</p>
+<p>RS485最大无线传输距离为1200米。最大传输速率为10Mbps(1250KB&#x2F;s)，在100Kb&#x2F;S(12.5KB&#x2F;s)的传输速率下，才可以达到最大的通信距离。</p>
+<p>RS232全双工、RS485半双工，RS422全双工、UART全双工、USART异步全双工，同步单线半双工</p>
+<p>UART实现串行数据和并行数据的转换</p>
+<p>UART（TTL电平）与RS232、RS485区别就是电平不一样</p>
+<p>USART异步通信时和UART没区别，同步通信时能提供主动时钟</p>
+<h2 id="CAN（控制器局域网）"><a href="#CAN（控制器局域网）" class="headerlink" title="CAN（控制器局域网）"></a>CAN（控制器局域网）</h2><p><strong>距离小于40M:速度有1Mbps，即约128KB&#x2F;s</strong></p>
+<p><strong>距离大于40M小于10KM，速度低于5Kbps</strong></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44793491/article/details/107298426">CAN通信知识梳理及在Stm32上的应用（HAL库）</a></p>
+<p><strong>1.硬件</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/23032dbab51c4fd6acee4cf0163d58e3.png?x-oss-process=image#pic_center" alt="img"></p>
+<p>一个节点一般包含3个部分：**<code>微控制器</code><strong>，</strong><code>CAN控制器</code><strong>和</strong><code>CAN收发器</code>**。<img src="https://img-blog.csdnimg.cn/08ea431ac58a45ccbac79690dcfcdea9.png?x-oss-process=image#pic_center" alt="img"></p>
+<p>网络的两端必须有**<code>120Ω的终端电阻</code>**，为什么是120Ω，因为信号到终端被电阻吸收，避免反射回干扰下一次信号，所以一般都是放两端。</p>
+<p><strong>电平信号</strong></p>
+<p>显性电平（逻辑0）</p>
+<p>隐性电平（逻辑1）</p>
+<p><strong>2.软件</strong></p>
+<p><strong>报文类型（或“帧”）</strong></p>
+<ul>
+<li><p><strong>数据帧</strong></p>
+<ul>
+<li><p><strong>仲裁字段</strong>。当两个或多个节点竞争总线时，确定报文的优先级。仲裁字段包含：</p>
+</li>
+<li><ul>
+<li>对于CAN 2.0A，一个11位的标识符和一个支配数据帧的RTR位。</li>
+<li>对于CAN 2.0B，一个29位的标识符（其中还包含两个隐性位：SRR和IDE）和RTR位。</li>
+</ul>
+</li>
+<li><p><strong>数据字段</strong>。包含0到8字节数据。</p>
+</li>
+<li><p><strong>CRC字段</strong>。包含一个基于报文大部分数据计算得到的15位校验和。校验和用于错误检测。</p>
+</li>
+<li><p><strong>应答时隙</strong>。任何能够正确接收报文的CAN控制器都会在每条报文的末尾发送一个应答位。传送节点检查应答位是否存在，如果没有检测到应答位，会重新发送报文。</p>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/26679532c1da45fb8e6c8a6150bd8e17.png?x-oss-process=image#pic_center" alt="img"></p>
+</li>
+<li><p><strong>远程帧</strong></p>
+<p>远程帧与数据帧十分相似，但是有两个重要的区别：</p>
+<ul>
+<li>它被显式标记为远程帧（仲裁字段中的RTR位为隐性），并且</li>
+<li>它没有数据字段。</li>
+</ul>
+<p>远程帧的预期目的是征求传输响应的数据帧。远程帧可以用来实现总线通信管理的请求-响应类型。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-1063d32cecb6662619610b251f0d701d_720w.webp" alt="img"></p>
+</li>
+<li><p><strong>错误帧</strong></p>
+<p>错误帧包含一个错误标志。这个错误标志是6位长的相同值（因此违背位填充规则）和一个错误定界符（8个隐性位）。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-6e67ba85cb4c46287246fec785533452_720w.webp" alt="img"></p>
+</li>
+<li><p><strong>过载帧</strong></p>
+</li>
+</ul>
+<p><strong>帧格式</strong></p>
+<ul>
+<li><strong>标准帧</strong>：标准帧使用11位的标识符（ID）来表示消息的优先级和内容。标准帧的标识符长度为11位，适用于大部分常见的通信场景。</li>
+<li><strong>扩展帧</strong>：扩展帧使用29位的标识符来表示消息。扩展帧的标识符长度为29位，更适用于复杂网络中的高级通信需求，提供更大的灵活性和可扩展性。</li>
+</ul>
+<p><strong>总线仲裁</strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/549534554">CAN总线仲裁原理 - 知乎 (zhihu.com)</a></p>
+<p>载波侦听多路访问CSMA，即：利用“线与”规则进行仲裁。</p>
+<p>载波侦听：就是每个CAN节点“听”总线是否空闲，空闲了，就可以去尝试发送CAN报文。</p>
+<p>ID从高位开始，电平相等则比较下一位，优先显性电平（即0）。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-71cee39427f5321a1672df8c772f1a0b_720w.webp" alt="img"></p>
+<p><strong>常见的错误和异常情况</strong></p>
+<ul>
+<li><strong>错误计数达到上限</strong>：CAN控制器会监测传输过程中的错误，如位错误、传输错误等。当错误发生时，错误计数会递增。当错误计数达到上限时，说明通信质量较差或存在故障。</li>
+<li><strong>总线冲突</strong>：多个CAN节点同时发送消息，导致总线上的冲突。</li>
+<li><strong>帧丢失</strong>：由于各种原因，某些CAN帧可能会丢失。</li>
+</ul>
+<p><strong>处理方法</strong></p>
+<ul>
+<li><strong>重传机制</strong>：对于数据传输错误或帧丢失，可使用重传机制，重新发送丢失的消息或帧。</li>
+<li><strong>错误处理程序</strong>：设置错误处理程序，处理错误计数达到上限的情况。可以根据实际情况采取如降低通信速率、重置错误计数等措施。</li>
+<li>对于总线冲突，通常可以使用<strong>帧优先级和仲裁算法</strong>来解决冲突，确保消息的有序发送。</li>
+</ul>
+<p><strong>多个CAN设备区分和管理</strong></p>
+<ul>
+<li><strong>设备选择</strong>：每个CAN设备通常都有一个唯一的标识符或地址，可通过该标识符来选择特定的设备进行操作。</li>
+<li><strong>设备管理</strong>：可以使用设备管理结构来记录和跟踪每个CAN设备的状态、设置和缓冲区等信息。</li>
+<li><strong>多路复用</strong>：通过多路复用技术，将多个CAN设备连接到一个CAN控制器上，使其共享相同的硬件资源。</li>
+</ul>
+<p><strong>保证CAN通信的可靠性和实时性</strong></p>
+<ul>
+<li><strong>硬实时操作系统</strong>：使用硬实时操作系统可以提供更高的实时性保证，确保CAN通信的响应和处理时间满足严格的时间要求。</li>
+<li><strong>优先级管理</strong>：设定CAN消息的优先级，确保高优先级的消息能够更快地发送和接收。可以使用优先级轮转或优先级反转等调度算法来管理消息的优先级。</li>
+<li><strong>错误处理和冗余机制</strong>：实施错误检测、纠正和恢复机制，以确保数据的可靠传输。例如，使用循环冗余校验（CRC）检查数据完整性，使用自动重传请求（ARQ）机制在发生错误时重新发送消息。</li>
+<li><strong>时间同步</strong>：在实时性要求较高的系统中，进行时间同步可以确保CAN节点之间的时间一致性，进一步提升通信的可靠性和实时性。</li>
+<li><strong>严格的延迟控制</strong>：通过有效的系统设计和优化，减小CAN消息在系统中的传输延迟，确保实时性要求得到满足。</li>
+</ul>
+<h2 id="USB"><a href="#USB" class="headerlink" title="USB"></a>USB</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/q15873584778/article/details/128095100?spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-16-128095100-blog-85759974.235%5Ev38%5Epc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-16-128095100-blog-85759974.235%5Ev38%5Epc_relevant_sort_base3&utm_relevant_index=21">USB协议入门解析_usb协议解析_</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44760112/article/details/126088772">usb 传输协议_usb协议_秋绘の枫的博客-CSDN博客</a></p>
+<p>硬件：</p>
+<p>USB芯片也分为Controller部分和PHY部分。Controller部分主要实现USB的协议和控制。内部逻辑主要有MAC层、CSR层和FIFO控制层，还有其他低功耗管理之类层次。MAC实现按USB协议进行数据包打包和解包，并把数据按照UTMI总线格式发送给PHY（USB3.0为PIPE）。CSR层进行寄存器控制，软件对USB芯片的控制就是通过CSR寄存器，这部分和CPU进行交互访问，主要作为Slave通过AXI或者AHB进行交互。FIFO控制层主要是和DDR进行数据交互，控制USB从DDR搬运数据的通道，主要作为Master通过AXI&#x2F;AHB进行交互。PHY部分功能主要实现并转串的功能，把UTMI或者PIPE口的并行数据转换成串行数据，再通过差分数据线输出到芯片外部。</p>
+<p>USB四层描述符，每个USB设备都可以有多个配置，配置就相当于功能，一个配置可以有多个接口，接口是逻辑上的概念，接口之间隔离互不干扰。一个接口可以有多个端点，它是数据交互的实体，相当于缓冲区，存放和发送usb数据，端点是一对一连接的，只支持一个方向的数据传输。端点0每个设备都拥有，用来对逻辑设备进行配置，端点0在上电和接入的时候就被配置。</p>
+<p>USB总线是一种轮询方式的总线，他是树形拓扑结构。所有的数据传输都是主机发起的，端点之间通过管道pipe相连，pipe通信有两种，一种是stream，另一种是message。</p>
+<p><img src="https://img-blog.csdnimg.cn/3720785e3fb54fd8ba12c8613948944e.png" alt="在这里插入图片描述"></p>
+<p>端点位于USB 外设内部，所有通信数据的来源或目的都基于这些端点，是一个可寻址的FIFO。<br><strong>每个USB 外设有一个唯一的地址，设备和端点一一对应，USB2.0规定最多32个端点。</strong>主机通过发出器件地址和每次数据传输的端点号，向一个具体端点(FIFO)发送数据。<br>每个端点的地址为0 到15，一个端点地址对应一个方向。所以，端点2-IN 与端点2-OUT 完全不同。 每个器件有一个默认的双向控制端点0，因此不存在端点0-IN 和端点0-OUT。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yongdaimi/p/11981553.html">USB：USB通信中的端点(endpoint)和四种传输模式 - 夜行过客 - 博客园 (cnblogs.com)</a></p>
+<p>以下是不同类型的USB端点在不同速度下支持的数据传输大小：</p>
+<ol>
+<li><p>控制端点（Control Endpoint）：</p>
+<ul>
+<li>全速（Full-Speed）：支持最大64字节大小的数据包。</li>
+<li>高速（High-Speed）和超速（SuperSpeed）：支持最大64字节大小的数据包。</li>
+</ul>
+</li>
+<li><p>批量端点（Bulk Endpoint）：</p>
+<ul>
+<li>全速：支持最大64字节大小的数据包。</li>
+<li>高速：支持最大512字节大小的数据包。</li>
+<li>超速：支持最大1024字节大小的数据包。</li>
+</ul>
+</li>
+<li><p>中断端点（Interrupt Endpoint）：</p>
+<ul>
+<li>全速：支持最大64字节大小的数据包，但较低的延迟和更高的帧率。</li>
+<li>高速：支持最大1024字节大小的数据包，具有较低的延迟和更高的帧率。</li>
+<li>超速：支持最大1024字节大小的数据包。</li>
+</ul>
+</li>
+<li><p>同步端点（Isochronous Endpoint）：</p>
+<ul>
+<li>全速：支持最大1023字节大小的数据包，每帧有一个或多个数据包，最高每毫秒帧率为1000。</li>
+<li>高速：支持最大1024字节大小的数据包，每帧有一个数据包，最高每毫秒帧率为1000。</li>
+<li>超速：支持最大1024字节大小的数据包，每帧有一个数据包，最高每秒帧率可超过1000。</li>
+</ul>
+</li>
+</ol>
+<p>协议：</p>
+<p>USB传输有四种类型，控制传输，中断传输，批量传输，等时传输。</p>
+<p>传输由不同的事务组成，事务由USB包组成。</p>
+<p>USB包由五部分组成，即同步字段（SYNC）、包标识符字段（PID）、数据字段、循环冗余校验字段（CRC）和包结尾字段（EOP），包的基本格式如下图：</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/15072494473/1000" alt="img"></p>
+<p>根据PID划分，包的类型包括令牌、数据、握手或特殊四种信息包类型。</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230714101237417.png" alt="image-20230714101237417"></p>
+<p>DATA0和DATA1使主机能与设各维持同步，且作为帧错之用。例如，如果两个连续的DATA0 被接收到的话，意味着DATA1封包被遗漏掉，并产生了错误的状况。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/256232317">USB 之四大传输方式（五） - 知乎 (zhihu.com)</a></p>
+<p><strong>控制传输：</strong>（三次事务）</p>
+<p>控制传输是用来传送控制信息的，控制传输可以分为三个阶段：建立阶段—&gt;数据阶段(不必须)—&gt;状态信息阶段。</p>
+<ul>
+<li><p>建立阶段</p>
+<p>建立过程使用一个建立事务。建立事务是一个输出数据包的过程，需要注意的点有：</p>
+<p>首先是令牌包，建立过程使用SETUP令牌包；<br>其次是数据包类型，SETUP只能使用DATA0包；<br>最后是握手，设备只能采用ACK来应答（错了的情况不应答），不能使用NAK或者STALL来应答，即设备必须要接受建立事务的数据。</p>
+<p><img src="https://img-blog.csdnimg.cn/8a08f12cc7074781a05399e44ea55497.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>数据阶段</p>
+<p>数据操作分为以下三类：控制读传输、控制写传输、无数据控制传输。</p>
+<p><strong>控制传输——写入</strong>：此例子Data阶段只用一个OUT事务完成了数据传输。</p>
+<p><img src="https://pics1.baidu.com/feed/b7003af33a87e9503a6b9ed612b7a64afaf2b4a0.png@f_auto?token=41f6f669a67f770963ac169e4958b540" alt="img"></p>
+<p><strong>控制传输——读取</strong>：此例子Data阶段只用一个IN事务完成了数据传输。</p>
+<p><img src="https://pics1.baidu.com/feed/30adcbef76094b363a7dc7c9a24389d08c109d44.png@f_auto?token=9dbbde5b787003148a33a107b1e11856" alt="img"></p>
+<p><strong>控制传输——无Data阶段</strong>：此例子是SetAddress，地址信息在SETUP事务中的DATA0包里，因此不需要Data阶段。</p>
+<p><img src="https://pics1.baidu.com/feed/d50735fae6cd7b89d282ab7ef0aab7aedb330efd.png@f_auto?token=bb45c08eac00afda950494f532310fab" alt="img"></p>
+</li>
+<li><p>状态信息阶段</p>
+<p>状态信息阶段是要返回数据传输的成功与否，具体也需要看控制传输的类型。需要注意的是，状态信息的数据传输方向与数据阶段方向相反。例如，数据阶段为IN事务则状态信息阶段为OUT事务。</p>
+</li>
+</ul>
+<p><strong>批量传输：</strong>（只有读写事务）</p>
+<p>1.批量传输过程中需要竞争带宽，<strong>传输延迟没有保证</strong>。适合数据量比较大的传输。</p>
+<p>2.有PID翻转，<strong>支持错误重传</strong>。</p>
+<p>U盘就是采用批量传输。</p>
+<p><strong>低速设备不支持批量传输</strong>，高速设备批量最大包长度为512字节，全速批量可以为 8、16、32、64，选择余地比较大。</p>
+<ul>
+<li><p>USB批量读数据</p>
+<p>由于批量读数据，是设备给主机传输数据，所以是数据阶段是IN事务。</p>
+<p><img src="https://img-blog.csdnimg.cn/a1c5ba1db6e2418fbb5f117ff6f09389.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARW1iZWRlZENvZGVy,size_20,color_FFFFFF,t_70,g_se,x_16" alt="img"></p>
+</li>
+<li><p>USB批量写数据</p>
+<p>因为是主机给设备传输数据，所以是数据阶段是OUT事务，如下图。</p>
+<p><img src="https://img-blog.csdnimg.cn/47070856e4984e83a0920b958de65a14.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARW1iZWRlZENvZGVy,size_20,color_FFFFFF,t_70,g_se,x_16" alt="img"></p>
+</li>
+</ul>
+<p><img src="https://pic4.zhimg.com/80/v2-67700757c0f0a0acdc9a4e955f0213c7_720w.webp" alt="img"></p>
+<p><strong>中断传输：</strong>（只有读写事务）</p>
+<p>采用<strong>定时轮询</strong>的方式收发数据，每次主机对中断端点查询时，如果设备有数据传输，则返回数据，否则NAK，表示未准备好。</p>
+<p>中断传输一般用于对延迟要求比较严格，同时数据量较小，比如我们常见的<strong>键盘、鼠标</strong>就是采用中断传输方式。</p>
+<p>当你的鼠标、键盘插入电脑后，电脑在枚举配置成功后，就会按照描述符中的查询时间定时发送 IN 令牌包，获取所需的数据，如果设备没有数据发送，则回复 NAK。</p>
+<p>对于<strong>全速</strong>端点，中断传输的间隔在 <strong>1 ms 到 255 ms</strong> 之间，对于<strong>低速</strong>端点，间隔时间限制在<strong>10ms到255ms</strong>之间, 对于<strong>高速</strong>端点，间隔为<strong>125us</strong>。</p>
+<p><strong>所以高速批量传输125us传输1024字节。</strong></p>
+<p>中断传输和批量传输的结构基本一致，只只是中断传输没有ping和nyet两种包。</p>
+<p><img src="https://img-blog.csdnimg.cn/17f2d8c9fdbe4882be1340ba2fd02c7d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5Y2O5L2XaGFucw==,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+<p><strong>同步传输</strong>：（只有读写事务）</p>
+<p>1.保证带宽，没有延迟，<strong>实时性好</strong></p>
+<p>2.不支持PID翻转，没有握手包，会有错帧，四大传输中唯一<strong>不可靠</strong>的传输方式。</p>
+<p>3.<strong>优先级高</strong></p>
+<p>这种传输用于摄像头、USB音响等</p>
+<p><img src="https://pic1.zhimg.com/80/v2-0847a3a84cec16070b61208c1ebdd714_720w.webp" alt="img"></p>
+<h4 id="MSC"><a href="#MSC" class="headerlink" title="MSC"></a>MSC</h4><p><a target="_blank" rel="noopener" href="https://www.likecs.com/show-204184762.html">USB bulk设备中的CBW和CSW - 爱码网 (likecs.com)</a></p>
+<p>1.存储介质遵循<strong>SCSI</strong>协议</p>
+<p>2.Host和Device间数据通讯协议是Bulk-only Transport，即<strong>BOT</strong></p>
+<p>有三种类型的数据在USB和设备之间传送，<strong>CBW、CSW和普通数据</strong></p>
+<p><strong>CBW</strong>，即命令块包，是从USB Host发送到设备的命令，里面包含着SCSI指令集，设备需要从CBW提取出命令。命令可能为<strong>写入、读取和查询</strong>。</p>
+<p><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/doc/EDOC1000149331/ec501220">SCSI命令集 - ES3000 V3 SAS SSD 用户指南 07 - 华为 (huawei.com)</a></p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230721111927791.png" alt="image-20230721111927791"></p>
+<p><strong>CSW</strong>，即命令执行状态包，是设备执行完命令后向HOST发出的。Host根据CSW来决定是否继续发送下一个CBW或是数据。</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230721111943640.png" alt="image-20230721111943640"></p>
+<p><a target="_blank" rel="noopener" href="https://forum.huawei.com/enterprise/zh/thread/580932770203582464">什么是LUN (huawei.com)</a></p>
+<p>LUN相当于分区或者逻辑磁盘</p>
+<p>在存储区域网络SAN（Storage Area Network）中，逻辑单元号LUN（Logical Unit Number）是用来标识一个逻辑单元的数字，这个逻辑单元是通过SCSI寻址的设备。换句话说，存储系统将物理硬盘进行分区，成为拥有逻辑地址的各个部分，进而允许主机进行访问，这样的一个分区便称为一个LUN。通常说的LUN也指在SAN存储上创建的逻辑磁盘。</p>
+<p>卷&#x3D; 分区 ≤ 主机设备管理器中的磁盘 &#x3D; LUN ≤ 存储设备中硬盘的总容量。</p>
+<h4 id="URB"><a href="#URB" class="headerlink" title="URB"></a>URB</h4><p> URB(USB Request Block,<strong>USB请求块</strong>)是USB数据传机制使用的核心数据结构。（linux驱动有，ST只有简单的urb状态）</p>
+<p>URB就相当于数据传输时使用到的句柄，包含状态、管道等重要信息。</p>
+<p><strong>URB 处理流程</strong></p>
+<p>（1）usb 设备驱动程序创建并初始化一个访问特定usb设备特定端点的 urb，并提交给 usb core；<br>（2）usb core 提交该 urb 到 usb 主控制器驱动程序；<br>（3）usb 主控制器驱动程序根据 urb 描述的信息，来访问 usb 设备；<br>（4）当设备访问结束后，usb 主控制器驱动程序通知 usb core（调用这个函数usb_complete_t complete;）然后其再通知usb设备驱动程序。</p>
+<h1 id="嵌入式开发流程"><a href="#嵌入式开发流程" class="headerlink" title="嵌入式开发流程"></a>嵌入式开发流程</h1><h2 id="开发环境搭建"><a href="#开发环境搭建" class="headerlink" title="开发环境搭建"></a>开发环境搭建</h2><p><img src="E:\研究生学习\毕业相关\工作应聘\images\开发板环境搭建.png" alt="image-20230703113800378"></p>
+<h3 id="交叉编译工具"><a href="#交叉编译工具" class="headerlink" title="交叉编译工具"></a>交叉编译工具</h3><p><a target="_blank" rel="noopener" href="https://www.crifan.com/files/doc/docbook/cross_compile/release/html/cross_compile.html">交叉编译详解 </a></p>
+<p>交叉编译器的（前缀）的名字的命名规则是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-vendor-kernel-system</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>arch，即目标系统架构</p>
+</li>
+<li><p>vendor，即生成厂家，提供商，或者写成CPU的厂家的名字，或者是开发板的名字等等。</p>
+</li>
+<li><p>kernel，直译为，内核</p>
+</li>
+<li><p>system，直译为，系统</p>
+<p>其实主要表示的，交叉编译器所选择的库函数和目标系统</p>
+<p>最常见的一些值有，gnu，gnueabi，uclibcgnueabi等等。</p>
+</li>
+</ul>
+<h3 id="SD卡烧录"><a href="#SD卡烧录" class="headerlink" title="SD卡烧录"></a>SD卡烧录</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/challenglistic/article/details/130745808">【系统移植】SD卡烧录uboot、linux内核、根文件系统_uboot烧录_</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/637951642">imx6ull固化和更新uboot、zImage和dtb方法—超详细总结 - 知乎 (zhihu.com)</a></p>
+<ul>
+<li><p>格式化SD卡</p>
+</li>
+<li><p>分区</p>
+</li>
+</ul>
+<p>SD卡分为主区（uboot、内核）和二区（文件系统）</p>
+<p><img src="https://img-blog.csdnimg.cn/bcf8b1d58492424bb2b60f7c19ddf764.png" alt="img"></p>
+<ul>
+<li><p>烧写引导程序和内核镜像</p>
+</li>
+<li><p>烧写文件系统</p>
+</li>
+</ul>
+<p>tips：</p>
+<p>1.已烧录的sd卡连接PC机，ubuntu会自动挂载sd卡的二区文件系统</p>
+<p>2.sdb1分区将挂载为&#x2F;boot（所以更新内核镜像和设备树可以通过修改&#x2F;boot方式）</p>
+<h3 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h3><ul>
+<li><strong>SD卡启动</strong></li>
+</ul>
+<p>在 Ubuntu 下烧写 SD&#x2F;TF 卡，可烧写整个（Uboot、内核、设备树、文件系统），也可单独烧写Uboot、内核、设备树。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if=sdcard.img of=/dev/sdb</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>网络启动</strong></li>
+</ul>
+<p>在Ubuntu 使用Buildroot编译生成Uboot镜像、内核镜像、设备树文件、根文件系统，将Uboot镜像烧录到SD卡，内核镜像、设备树文件、根文件系统放在指定目录，开发板串口任意键进入uboot界面，设置 Uboot 启动参数使用 Ubuntu 的指定目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">=&gt; setenv serverip 192.168.5.11 //设置服务器的 IP 地址，这里指的是 Ubuntu 主机 IP</span><br><span class="line">=&gt; setenv ipaddr 192.168.5.9 //设置开发板的 IP 地址。</span><br><span class="line">=&gt; setenv nfsroot /home/book/nfs_rootfs //设置 nfs 文件系统所在目录。</span><br><span class="line">=&gt; run netboot //设置完成后，运行网络启动系统命令</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="U-boot"><a href="#U-boot" class="headerlink" title="U-boot"></a>U-boot</h2><h4 id="配置-编译"><a href="#配置-编译" class="headerlink" title="配置+编译"></a>配置+编译</h4><p>配置：</p>
+<p>目标文件auto.conf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make xxx-defconfig #解析KConfig、xxx-defconfig生成.config	用户可控配置（LED、UART等）</span><br><span class="line">make	#根据.config去掉注释、common文件等生成auto.config	（固定配置系统时钟、内存起始地址等）</span><br></pre></td></tr></table></figure>
+
+<p>编译：</p>
+<p>目标文件u-boot-dtb.imx</p>
+<p>u-boot-dtb.imx依赖于u-boot-dtb.bin，u-boot-dtb.bin又依赖于u-boot-nodtb.bin和dts&#x2F;dt.dtb</p>
+<p>各类u-boot文件都依赖于u-boot，先编译得到u-boot，它由<code>u-boot-init</code>、<code>u-boot-main</code>两部分链接而成</p>
+<p>编译分析看第一个文件（start.s）和链接脚本（u-boot.lds）</p>
+<p>1.head-y</p>
+<p>u-boot-init为：arch&#x2F;arm&#x2F;cpu&#x2F;armv7&#x2F;start.o</p>
+<p>2.子目录</p>
+<p>u-boot-main为：lib&#x2F;built-in.o  fs&#x2F;built-in.o  net&#x2F;built-in.o 等等</p>
+<p>使用Makefile.build的规则把各个obj-y编译、链接为built-in.o</p>
+<p>3.链接</p>
+<p>使用如下的命令链接得到u-boot</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">quiet_cmd_u-boot__ ?= LD      $@</span><br><span class="line">      cmd_u-boot__ ?= $(LD) $(LDFLAGS) $(LDFLAGS_u-boot) -o $@ \</span><br><span class="line">      -T u-boot.lds $(u-boot-init)                             \</span><br><span class="line">      --start-group $(u-boot-main) --end-group                 \</span><br><span class="line">      $(PLATFORM_LIBS) -Map u-boot.map</span><br></pre></td></tr></table></figure>
+
+<p>4.编译设备树</p>
+<p>编译得到设备树文件: <code>make -f ./scripts/Makefile.build obj=dts dtbs</code></p>
+<p>5.最后把u-boot、设备树打包: </p>
+<p><code>make -f ./scripts/Makefile.build obj=arch/arm/imx-common u-boot-dtb.imx</code></p>
+<h4 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h4><p>启动流程1：</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\U-boot启动流程1.png" alt="image-20230628102209673"></p>
+<p>启动流程2：</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\U-boot启动流程2.png" alt="image-20230628103048851"></p>
+<p>BL0：BootROM</p>
+<p>BL1：SPL		  架构级初始化（左边）汇编语言和少部分C语言</p>
+<p>BL2：U-Boot	板级初始化（右边）纯C语言</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\BL1和BL2代码流程.png" alt="image-20230628112245714"></p>
+<p><strong>为什么要关闭cache？</strong></p>
+<p>内存初始化慢于cpu初始化，cpu读数据时会从cache读，内存数据没有准备好，造成指令取址异常。数据cache必关，指令cache无所谓。</p>
+<p><strong>为什么要关闭MMU？</strong></p>
+<p>用的是真实内存地址，MMU无关，防止干扰，所以关闭。</p>
+<p><strong>BL2两个阶段：</strong></p>
+<p><code>board_init_f()</code></p>
+<p>其最核心的内容就是调用了<code>init_sequence_f</code>初始化序列，进行了一系列初始化的工作。</p>
+<p>主要包括：串口、定时器、设备树、DM驱动模型等，另外还包括<code>global_data</code>结构体相关对象的变量。</p>
+<p>最后还有重定向（需要加载内核，防止覆盖U-BOOT）。</p>
+<p><code>board_init_r</code></p>
+<p>主要用于初始化各类外设信息，有一个<code>init_sequence_r</code>初始化列表，包括：<code>initr_dm</code>DM模型初始化，<code>initr_mmc</code>MMC驱动初始化，等等。</p>
+<p>最终，uboot就运行到了<code>run_main_loop</code>，进而执行<code>main_loop</code>这个函数。</p>
+<p><strong>相关定义：</strong></p>
+<p>XIP：存储器可以执行代码</p>
+<p>BootROM一级启动</p>
+<p>BootROM：硬件初始化、把程序从非XIP设备复制进RAM，从RAM里执行</p>
+<p>如何支持多种启动方式（SD卡、EMMC、USB、UART启动）</p>
+<ul>
+<li><p>方法1：芯片有boot pin，决定使用哪个外设。bootrom根据引脚决定读取哪个设备的程序</p>
+</li>
+<li><p>方法2：芯片有boot pin，决定多种外设的尝试顺序</p>
+<ul>
+<li>示例顺序1：SD、EMMC、USB</li>
+<li>示例顺序2：EMMC、SD、USB</li>
+<li>示例顺序3：USB</li>
+</ul>
+</li>
+</ul>
+<p>SPL二级加载，初始化系统，CPU 的配置，关闭看门狗，初始化时钟，初始化一些外设（比如 USB Controller、MMC Controller，Nand Controller 等）初始化DDR</p>
+<p>重定位有2种方法：</p>
+<ul>
+<li>程序当前位于地址A，但是它的链接地址是B，把它从A复制到B</li>
+<li>程序当前位于地址A，想把它复制到B<ul>
+<li>把它从A复制到B</li>
+<li>修改程序，把里面使用到的地址都重新为基于B的新地址</li>
+</ul>
+</li>
+</ul>
+<p><strong>bootcmd</strong></p>
+<p>bootcmd 保存着 uboot 默认命令，uboot 倒计时结束以后就会执行 bootcmd 中的命令。</p>
+<p>这些命令一般都是用来启动 Linux 内核的，比如读取 EMMC 或者 NAND Flash 中的 Linux 内核镜像文件和设备树文件到 DRAM 中，然后启动 Linux 内核。可以在 uboot 启动以后进入命令行设置 bootcmd 环境变量的值。如果 EMMC 或者 NAND 中没有保存 bootcmd 的值，那么 uboot 就会使用默认的值，板子第一次运行 uboot 的时候都会使用默认值来设置 bootcmd 环境变量。</p>
+<p><strong>Uboot传参</strong></p>
+<p>进入Uboot命令行模式，设置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setenv bootargs &quot;console=ttyS0,115200 root=/dev/mmcblk0p2&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>bootargs</strong> </p>
+<p>bootargs 保存着 uboot 传递给 Linux 内核的参数</p>
+<p>常用的参数有：</p>
+<ul>
+<li><p><strong>console</strong></p>
+<p>console 用来设置 linux 终端(或者叫控制台)，也就是通过什么设备来和 Linux 进行交互，是串口还是 LCD 屏幕？如果是串口的话应该是串口几等等。一般设置串口作为 Linux 终端。</p>
+</li>
+<li><p><strong>root</strong></p>
+<p>root 用来设置根文件系统的位置，root&#x3D;&#x2F;dev&#x2F;mmcblk1p2 用于指明根文件系统存放在mmcblk1 设备的分区 2 中。</p>
+</li>
+<li><p><strong>rootfstype</strong></p>
+<p>此选项一般配置 root 一起使用，rootfstype 用于指定根文件系统类型，如果根文件系统为ext 格式的话此选项无所谓。如果根文件系统是 yaffs、jffs 或 ubifs 的话就需要设置此选项，指定根文件系统的类型。</p>
+</li>
+</ul>
+<h2 id="内核"><a href="#内核" class="headerlink" title="内核"></a>内核</h2><p><strong>vmlinux</strong> 编译出来的最原始的内核文件，未压缩。</p>
+<p><strong>zImage</strong>  是vmlinux经过gzip压缩后的文件。</p>
+<p><strong>uImage</strong>  U-boot专用的映像文件，它是在zImage之前加上一个长度为0x40的tag。</p>
+<p><strong>zImage和uImage的区别</strong></p>
+<p>有了uImage头部的描述,u-boot就知道对应Image的信息,如果没有头部则需要自己手动去搞那些参数。</p>
+<p>bootm用于加载uImage和ramdisk</p>
+<p>bootz用于加载zImage和ext4文件系统</p>
+<h4 id="配置-编译-1"><a href="#配置-编译-1" class="headerlink" title="配置+编译"></a>配置+编译</h4><p>配置：</p>
+<p>和uboot配置类似</p>
+<p>.config生成auto.conf，宏定义配置项y和m在Makefile中体现，obj-y表示编译进内核，obj-m表示编译成ko模块</p>
+<p>.config生成autoconf.h，在源码中体现</p>
+<p>编译：</p>
+<p>uImage依赖vmlinux</p>
+<p>vmlinux依赖vmlinux-init和vmlinux-main</p>
+<p>vmlinux-init依赖head-y和init-y</p>
+<p>vmlinux-main依赖core-y、libs-y、drivers-y和net-y</p>
+<p>最终将head.o、init_task.o、built-in.o、lib链接生成vmlinux</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\linux内核编译.png" alt="image-20230704152813215"></p>
+<h4 id="启动流程-1"><a href="#启动流程-1" class="headerlink" title="启动流程"></a>启动流程</h4><p>Uboot传入参数：<strong>机器ID</strong>和<strong>启动参数</strong>（内存大小、内存起始地址、命令行command_line、boot_args）</p>
+<p>第一阶段内核引导阶段（<strong>head.S</strong>处理机器ID）</p>
+<ul>
+<li><p>判断是否支持这个cpu</p>
+</li>
+<li><p>判断是否支持这个单板（Uboot启动内核时传入的机器ID）</p>
+</li>
+<li><p>建立一级页表</p>
+</li>
+<li><p>使能MMU</p>
+</li>
+<li><p>跳到start_kernel（第一个C函数）</p>
+</li>
+</ul>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\linux启动第一阶段.png" alt="image-20230704162321876"></p>
+<p>第二阶段（<strong>start_kernel</strong>）</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30026297/article/details/116654025">linux 内核进程初始化,Linux内核基础——Linux内核启动初始化流程(第一个用户进程init的诞生)</a></p>
+<ul>
+<li><p>内核架构 、通用配置相关初始化</p>
+</li>
+<li><p>中断向量表相关初始化</p>
+</li>
+<li><p>内存管理相关初始化</p>
+</li>
+<li><p>进程管理相关初始化</p>
+</li>
+<li><p>进程调度相关初始化</p>
+</li>
+<li><p>网络子系统管理初始化</p>
+</li>
+<li><p>虚拟文件系统初始化</p>
+</li>
+<li><p>文件系统初始化 等等</p>
+</li>
+<li><p>调用rest_init()</p>
+<ul>
+<li><p>调用kernel_thread函数启动了2个内核线程，分别是：kernel_init和kthreadd。</p>
+<p>kernel_init内核线程主要负责开启1号进程init</p>
+<p>kthreadd内核线程同样也在用户空间开启了2号进程kthreadd，用于管理和调度其他内核线程。</p>
+<ul>
+<li><p>kernel_init()</p>
+<ul>
+<li>do_basic_setup()函数：主要通过核心函数do_initcalls()调用所有编译内核的驱动模块中的初始化函数。完成外设及其驱动程序的加载和初始化 ；</li>
+<li>挂载根文件系统[perpare_namespace函数]（挂载到根文件系统分区，nand分区例子如下）</li>
+</ul>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\nand分区.png" alt="image-20230704163914426"></p>
+<ul>
+<li><p>调用init_post()函数启动用户空间的init进程</p>
+<ul>
+<li>释放__init_begin段到__init_end段中的内存，供其它程序使用。[free_initmem()函数]</li>
+<li>打开dev&#x2F;console控制台设备(串口0),创建init进程的标准输入(文件描述符0)和另外2个文件描述符(1和2)：标准输出和标准错误。</li>
+<li>通过[run_init_process()函数]运行第一个用户进程init，即execute_command变量中存放init程序的执行路径。</li>
+</ul>
+<p>若execute_command的路径错误，则会执行四个备用方案。第一备用：&#x2F;sbin&#x2F;init，第二备用：&#x2F;etc&#x2F;init，第三备用：&#x2F;bin&#x2F;init，第四备用：&#x2F;bin&#x2F;sh。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>调用schedule函数开启内核调度系统</p>
+</li>
+<li><p>调用cpu_idle函数，将当前进程转变成idle进程(空闲进程)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\start_kernel.png" alt="image-20230704162151533"></p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\linux启动第二阶段.png" alt="image-20230704162041361"></p>
+<h2 id="根文件系统"><a href="#根文件系统" class="headerlink" title="根文件系统"></a>根文件系统</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liulipeng/p/3386351.html"><strong>构建最小根文件系统</strong></a></p>
+<p>1.一个最小根文件系统必须的项：</p>
+<ul>
+<li><p>&#x2F;dev&#x2F;console  这个在内核启动时打开：sys_open((const char __user *) “&#x2F;dev&#x2F;console”, O_RDWR, 0) </p>
+<p>&#x2F;dev&#x2F;null       当不设置标准输入输出标准出错时，就会定位到&#x2F;dev&#x2F;null</p>
+</li>
+<li><p>init本身，即busybox（最基础的四个&#x2F;bin、&#x2F;sbin、&#x2F;usr、linuxrc）</p>
+</li>
+<li><p>&#x2F;etc&#x2F;inittab配置文件</p>
+</li>
+<li><p>inittab配置文件中指定的应用程序或脚本</p>
+</li>
+<li><p>相应的库（如glibc库）</p>
+</li>
+</ul>
+<p>2.构建</p>
+<p>创建一个目录root_fs_mn，在目录下做如下操作：</p>
+<ul>
+<li><p>init进程需要dev&#x2F;console和dev&#x2F;null设备节点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mknod dev/console c 5 1</span><br><span class="line">mknod dev/null c 1 3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装busybox</p>
+<p>首先在Makefile中指定交叉编译器：</p>
+<p>找到并更改为：CROSS_COMPILE ?&#x3D; arm-linux-</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig  //这个可以配置一些选项</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make CONFIG_PREFIX=/home/smb/work/root_fs_mn install //一定要指定要释放的目录，否则会释放的主机的根目录下。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建etc&#x2F;inittab文件</p>
+<p>Busybox读取此文件来注册一些要运行的配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">::sysinit:/etc/init.d/rcS</span><br><span class="line">console::askfirst:-/bin/sh</span><br><span class="line">::shutdown:/bin/umount -a -r</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建etc&#x2F;init.d&#x2F;rcS文件</p>
+<p>这个shell脚本文件添加想要自动运行的任务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 　#!/bin/sh</span><br><span class="line">2.  ifconfig eth0 192.168.1.23   #配置开发板IP</span><br><span class="line">3.  mount -a        #挂载在etc/fstab中配置的挂载项</span><br><span class="line">4.  mkdir /dev/pts    #支持外部网络连接的虚拟终端telnet</span><br><span class="line">5.  mount -t devpts devpts /dev/pts</span><br><span class="line">6.  echo /sbin/mdev &gt; /proc/sys/kernel/hotplug #热插拔</span><br><span class="line">7.  mdev –s  #在dev目录下生成内核支持的所有节点</span><br></pre></td></tr></table></figure>
+
+<p>mount –a指令需读取etc&#x2F;fstab配置文件中的挂载内容，所以还要创建etc&#x2F;fstab文件！</p>
+<p>创建etc&#x2F;fstab文件</p>
+<p>这个文件控制mount命令的行为，在mount –a命令执行时。将读取这个文件中的配置挂载相应的内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. \# device  mount-point  type    options  dum    fsck    order</span><br><span class="line">2. proc     /proc       proc    defaults  0   0 </span><br><span class="line">3. tmpfs        /tmp        tmpfs   defaults  0   0</span><br><span class="line">4. sysfs     /sys     sysfs    defaults  0   0</span><br><span class="line">5. tmpfs        /dev        tmpfs   defaults  0   0</span><br></pre></td></tr></table></figure>
+
+<p>proc：Linux 内核提供了一种通过&#x2F;proc 文件系统，在运行时访问内核内部数据结构、改变内核设置的机制。proc文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。</p>
+<p>Sys: sysfs 文件系统总是被挂载在 &#x2F;sys 挂载点上. 这里sysfs文件系统是为了支持mdev。为了减少写入flash。将dev目录挂载为tmpfs使写入操作在内存中。</p>
+</li>
+<li><p>把C库拷到生成的根文件系统中，busybox（选择动态编译）和将要运行的应用程序都将用到。操作如下：</p>
+<p>（1）在生成的根文件系统根目录中创建lib目录。mkdir lib</p>
+<p>（2）在交叉编译器目录中找到glibc库的的目录lib</p>
+<p>（3）复制glibc到lib目录 cp <em>.so</em> &#x2F;home&#x2F;smb&#x2F;work&#x2F;root_fs_mn&#x2F;lib –d (-d表示将连接符号还按符号复制)</p>
+</li>
+<li><p>构建其他目录，包括proc mnt tmp sys root。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir proc mnt tmp sys root</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>3.挂载根文件系统</p>
+<ul>
+<li><p>nandflash挂载</p>
+<p>如果要烧入Nand flash中运行，则制作为yaffs映像。</p>
+<p>512字节每页大小的Flash用<strong>mkyaffs2image</strong> </p>
+<p>2K的用<strong>mkyaffs2image-128M</strong>，命令格式为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkyaffs2image-128M /home/smb/work/root_fs_mn  my_root.yaffs2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>nfs挂载</p>
+<p>PC端：</p>
+<p>（1）.首先确保安装好了nfs功能。</p>
+<p>（2）在&#x2F;etc&#x2F;exports文件中配置nfs服务，内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/smb/work/root_fs_mn 192.168.1.23(rw,sync,no_root_squash)</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<p>&#x2F;home&#x2F;smb&#x2F;work&#x2F;root_fs_mn 为要共享的路径</p>
+<p>192.168.1.23是接受连接的ip（这里可以是*,表示接受所有的IP连接）</p>
+<p>rw:读写权限.</p>
+<p>sync: 同步写入.</p>
+<p>no_root_squash:表示如果客户端（开发板）是root权限的话，那么对于这个分享的目录来说，他就具有写权限。</p>
+<p>（3）重启nfs服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/nfs restart</span><br></pre></td></tr></table></figure>
+
+<p>此时可以自己本地挂接测试一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount-t nfs 主机ip:/home/smb/work/root_fs_mn </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="驱动"><a href="#驱动" class="headerlink" title="驱动"></a>驱动</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44360592/article/details/123610213">嵌入式Linux驱动开发的演进_linux设备驱动的变迁史_</a></p>
+<p><strong>开发流程：</strong></p>
+<ol>
+<li>确定设备号</li>
+<li>定义自己的file_operations结构体</li>
+<li>在入口函数中，把file_operations结构体告诉内核，完成驱动注册</li>
+<li>相应地，编写出口函数</li>
+<li>完善</li>
+</ol>
+<p><strong>总线设备驱动模型开发流程：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/W__winter/article/details/130517484">Linux驱动开发：platform总线驱动_linux platform_driver_凛冬将至__的博客-CSDN博客</a></p>
+<p>1、注册总线xxx_bus_type:</p>
+<p>2、注册设备:将系统设备注册进内核的对应总线上，大多是调用xxx_device_regisger注册。</p>
+<p>3、注册驱动:将系统设备的driver注册进内核的对应总线上:大多是调用xxx_drvier_register()注册。(xxx_drvier_register:将自己加到xxx总线的driver链表，然后使用总线bus匹配对应的device )</p>
+<p>2和3很多是在同一个函数中注册的，所以一起举例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">platform_driver_register(&amp;uart_driver); //将uart的driver注册到platform_bus上platform_device_register(&amp;uart_device); //将uart的device注册到platform_bus上</span><br></pre></td></tr></table></figure>
+
+<p>4、设备和驱动的匹配:</p>
+<p>老版内核的匹配大部分是看device和driver的name属性是否相同;新版使用设备树的内核中，是根据程序中driver的compatile与设备树节点的compatible是否相同来匹配!match的工作是由总线(bus)来完成。</p>
+<p><strong>发展历程</strong></p>
+<ul>
+<li><strong>应用+驱动</strong></li>
+</ul>
+<p>在应用中使用相应的函数，在驱动中实现相应的函数。并且在相应的函数中（如open、write等）直接操作物理寄存器。</p>
+<p>所含文件：app.c、driver.c</p>
+<p>特点：如果更换led灯的话，driver.c要重写。</p>
+<ul>
+<li><strong>应用+驱动框架+led_opr</strong></li>
+</ul>
+<p>在驱动相应的函数中不去操作物理寄存器，而是使用下层提供的led_opr结构体，其中包含init和write等成员，在下层中实现init、write等函数（操作寄存器）。</p>
+<p>所含文件：app.c、driver.c、led_opr.c</p>
+<p>特点：led灯更换后只需修改led_opr.c文件。</p>
+<ul>
+<li><strong>应用+驱动框架+led_resource+chip_gpio</strong></li>
+</ul>
+<p>正如上面所说，led灯更换后，led_opr需要修改。所以我们可以继续封装，led_resource.c中指明用到了那些设备&#x2F;资源，chip_gpio.c中是对某款芯片所有的gpio的操作。这样我们在led_resource中指明所用的设备（led），在driver.c相应的函数中（open、write等）从led_resource中获取指定管脚，然后再调用chip_gpio提供的一些函数（如init、ctrl等）来操作指定管脚。</p>
+<p>所含文件：app.c、driver.c、led_resource.c、chip_gpio.c</p>
+<p>特点：led更换后只需修改led_resource.c文件。即led_resource指明led灯的管脚，chip_gpio实现某款芯片所有gpio的操作（init和ctrl），driver.c根据led_resource指明的引脚告诉chip_gpio操作那个引脚。</p>
+<ul>
+<li><strong>应用+驱动框架+platform_device+platform_driver</strong></li>
+</ul>
+<p>和上面一个一样的，只不过采用Linux内核提供的总线驱动框架来编写驱动程序。platform_device声明设备&#x2F;led所用的资源，platform_driver实现对platform_device声明的设备进行操作(platform_driver可以写入到驱动框架中去)。</p>
+<p>所含文件：app.c、driver.c、led_resource.c(platform_device)、chip_gpio.c(platform_driver)</p>
+<ul>
+<li><strong>应用+驱动框架+设备树+platform_driver</strong></li>
+</ul>
+<p>和上面一样，只不过platform_device写入到设备树中去了（前面说过，设备树中的结点会被内核解析成device_node，某些device_node被解析成platform_device）。然后platform_driver可以和驱动框架写一块。最终的文件只含：</p>
+<p>所含文件：app.c、driver.c(platform_driver)、设备树.dts</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">YiMing Pan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/">http://example.com/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">笔记</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">YiMing Pan</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#STM32"><span class="toc-number">1.</span> <span class="toc-text">STM32</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.</span> <span class="toc-text">通信协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SPI%EF%BC%88%E4%B8%B2%E8%A1%8C%E5%A4%96%E8%AE%BE%E6%8E%A5%E5%8F%A3%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">SPI（串行外设接口）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I2C%EF%BC%88%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">I2C（串行通信协议）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I2S%EF%BC%88%E6%95%B0%E5%AD%97%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">I2S（数字音频接口）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UART%EF%BC%88%E9%80%9A%E7%94%A8%E5%BC%82%E6%AD%A5%E6%94%B6%E5%8F%91%E4%BC%A0%E8%BE%93%E5%99%A8%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">UART（通用异步收发传输器）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UART%E3%80%81RS232%E3%80%81RS485%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.4.1.</span> <span class="toc-text">UART、RS232、RS485之间的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CAN%EF%BC%88%E6%8E%A7%E5%88%B6%E5%99%A8%E5%B1%80%E5%9F%9F%E7%BD%91%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">CAN（控制器局域网）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#USB"><span class="toc-number">2.6.</span> <span class="toc-text">USB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MSC"><span class="toc-number">2.6.0.1.</span> <span class="toc-text">MSC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#URB"><span class="toc-number">2.6.0.2.</span> <span class="toc-text">URB</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">嵌入式开发流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">3.1.</span> <span class="toc-text">开发环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7"><span class="toc-number">3.1.1.</span> <span class="toc-text">交叉编译工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SD%E5%8D%A1%E7%83%A7%E5%BD%95"><span class="toc-number">3.1.2.</span> <span class="toc-text">SD卡烧录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">3.1.3.</span> <span class="toc-text">启动方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#U-boot"><span class="toc-number">3.2.</span> <span class="toc-text">U-boot</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-%E7%BC%96%E8%AF%91"><span class="toc-number">3.2.0.1.</span> <span class="toc-text">配置+编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">3.2.0.2.</span> <span class="toc-text">启动流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8"><span class="toc-number">3.3.</span> <span class="toc-text">内核</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-%E7%BC%96%E8%AF%91-1"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">配置+编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B-1"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">启动流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.4.</span> <span class="toc-text">根文件系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8"><span class="toc-number">3.5.</span> <span class="toc-text">驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">3.6.</span> <span class="toc-text">应用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/" title="嵌入式">嵌入式</a><time datetime="2023-08-17T11:49:11.000Z" title="发表于 2023-08-17 19:49:11">2023-08-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By YiMing Pan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
