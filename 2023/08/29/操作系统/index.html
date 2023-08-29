@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>操作系统 |  人才公海</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-操作系统"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  操作系统
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/08/29/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time datetime="2023-08-29T03:27:07.000Z" itemprop="datePublished">2023-08-29</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">4.7k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">17 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/504351102">知乎：操作系统面试题（八股文）2022最新版</a></p>
+<p><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/">小林coding：图解系统</a></p>
+<h2 id="uCLinux"><a href="#uCLinux" class="headerlink" title="uCLinux"></a>uCLinux</h2><p>uCLinux主要是针对目标处理器没有存储管理单元MMU（Memory Management Unit）的嵌入式系统而设计的。</p>
+<p><strong>uCLinux仍然采用存储器的分页管理</strong>，系统在启动时把实际存储器进行分页。在加载应用程序时程序分页加载。但是，由于没有MMU管理，所以实际上uCLinux采用实存储器管理策略。</p>
+<p>uCLinux系统对于内存的访问是直接的，所有程序中访问的地址都是实际的<strong>物理地址</strong>。操作系统对内存空间没有保护，各个进程实际上共享一个运行空间。一个进程在执行前，系统必须为进程分配足够的连续地址空间，然后全部载入主存储器的连续空间中。</p>
+<p><strong>与Linux区别？</strong></p>
+<p><strong>1、没有内存保护</strong></p>
+<p><strong>2、没有自动生长的堆栈</strong></p>
+<p>uCLinux没有自动生长的堆栈，也没有brk()函数，这样，用户空间的程序必须使用mmap() 命令来分配内存。为了方便，在uclinux的C语言库中所实现的malloc()实质上就是一个mmap()。</p>
+<p><strong>3、通用架构的内核不同</strong></p>
+<p>&#x2F;linux&#x2F;mmnommu目录取代了&#x2F;linux&#x2F;mm目录，去除了MMU的硬件依赖</p>
+<h2 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h2><h3 id="指令"><a href="#指令" class="headerlink" title="指令"></a><strong>指令</strong></h3><p><strong>查看每个物理cpu中core个数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat/Proc/cpuinfo | grep &quot;cpu cores&quot; | wC -l</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看逻辑CPU的个数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat/Proc/cpuinfo | grep &quot;processor&quot; | wC -l</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>查看系统性能</strong></p>
+<ul>
+<li><p>top</p>
+<p>可以实时显示系统中运行的进程和相关的性能统计信息，包括 CPU 使用率、内存使用情况、进程列表等。</p>
+</li>
+<li><p>vmstat</p>
+<p>提供了关于系统内存、进程、虚拟内存、磁盘 I&#x2F;O 等方面的统计信息。</p>
+</li>
+<li><p>netstat</p>
+<p>显示网络连接、路由表和网络接口信息</p>
+</li>
+<li><p>ifconfig</p>
+<p>显示或配置网络设备（网络接口卡）的命令</p>
+</li>
+<li><p>sar</p>
+<p>可以获得系统在不同时间间隔内的 CPU 使用率、内存使用率、磁盘 I&#x2F;O、网络活动等信息。例如，<code>sar -u</code> 可以显示 CPU 使用率的报告，<code>sar -r</code> 可以显示内存使用率的报告。</p>
+</li>
+<li><p>iostat</p>
+<p>查看磁盘 I&#x2F;O 活动的统计信息。它提供了有关磁盘读写速度、I&#x2F;O 请求队列长度以及每个磁盘的使用情况等数据。例如，<code>iostat -d</code> 可以显示磁盘的读写速度。</p>
+</li>
+<li><p>free</p>
+<p>用于查看系统的内存使用情况。它显示系统中的总内存、已使用内存、可用内存等信息。</p>
+</li>
+</ul>
+<p><strong>linux远程文件复制</strong></p>
+<ul>
+<li><p>SCP命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp [options] [source-file] [destination]</span><br></pre></td></tr></table></figure>
+
+<p>例如，如果你想将本地&#x2F;home&#x2F;user目录下的test.txt文件复制到远程服务器的&#x2F;tmp目录下，可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /home/user/test.txt user@remote.server:/tmp</span><br></pre></td></tr></table></figure>
+
+<p>其中，user是远程服务器上的用户名，remote.server是远程服务器的IP地址或主机名，&#x2F;tmp是远程服务器上的目标目录。</p>
+</li>
+<li><p>SFTP命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sftp [options] [user@]host[:file [destination]]</span><br></pre></td></tr></table></figure>
+
+<p>例如，如果你想将本地&#x2F;home&#x2F;user目录下的test.txt文件复制到远程服务器的&#x2F;tmp目录下，可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sftp user@remote.server:/tmp</span><br></pre></td></tr></table></figure>
+
+<p>其中，put命令用于将本地文件复制到远程服务器，</p>
+</li>
+<li><p>Rsync命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync [options] [source] [destination]</span><br></pre></td></tr></table></figure>
+
+<p>例如，如果你想将本地&#x2F;home&#x2F;user目录下的test.txt文件复制到远程服务器的&#x2F;tmp目录下，可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync /home/user/test.txt user@remote.server:/tmp</span><br></pre></td></tr></table></figure>
+
+<p>其中，-a选项用于将文件进行彻底复制，并保留文件的元数据信息。</p>
+</li>
+<li><p>FTP命令</p>
+<p>FTP客户端常用命令：</p>
+<ul>
+<li>ls 列出远程机的当前目录</li>
+<li>cd 在远程机上改变工作目录</li>
+<li>lcd 在本地机上改变工作目录</li>
+<li>ascii 设置文件传输方式为ASCII模式</li>
+<li>binary 设置文件传输方式为二进制模式</li>
+<li>open 连接远程ftp站点</li>
+<li>close 终止当前的ftp会话</li>
+<li>hash 每次传输完数据缓冲区中的数据后就显示一个#号</li>
+<li>get（mget） 从远程机传送指定文件到本地机 (前缀+m为批量操作)</li>
+<li>put（mput） 从本地机传送指定文件到远程机</li>
+<li>delete（mdelete） 删除文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="五种I-O模型"><a href="#五种I-O模型" class="headerlink" title="五种I&#x2F;O模型"></a><strong>五种I&#x2F;O模型</strong></h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44836676/article/details/124672227">5种I&#x2F;O模型</a></p>
+<p><img src="https://img-blog.csdnimg.cn/20200605193953223.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjAwNjg4Mg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>同步的执行效率会比较低，耗费时间，但有利于我们<strong>对流程进行控制</strong>，避免很多不可掌控的意外情况；</li>
+<li>异步的执行效率高，节省时间，但是会占用更多的资源，也<strong>不利于我们对进程进行控制</strong></li>
+</ul>
+<h3 id="软中断"><a href="#软中断" class="headerlink" title="软中断"></a>软中断</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_51231887/article/details/130859515">Linux中断子系统之软中断、tasklet和工作队列_野山居士的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.iteye.com/blog/wx1569578408-2500458">软中断，tasklet和工作队列的区别与联系 - - ITeye博客</a></p>
+<p>下面将比较三种机制的差别与联系。</p>
+<ul>
+<li><p>软中断： </p>
+<p>1、软中断是在编译期间静态分配的。<br>2、最多可以有32个软中断。<br>3、软中断不会抢占另外一个软中断，唯一可以抢占软中断的是中断处理程序。</p>
+<p>4、可以并发运行在多个CPU上（即使同一类型的也可以）。所以软中断必须设计为可重入的函数（允许多个CPU同时操作），因此也需要使用自旋锁来保护其数据结构。<br>5、目前只有两个子系直接使用软中断：网络和SCSI。<br>6、执行时间有：从硬件中断代码返回时、在ksoftirqd内核线程中和某些显示检查并执行软中断的代码中。</p>
+</li>
+<li><p>tasklet： </p>
+<p>1、tasklet是使用两类软中断实现的：HI_SOFTIRQ和TASKLET_SOFTIRQ。</p>
+<p>2、可以动态增加减少，没有数量限制。<br>3、同一类tasklet不能并发执行。<br>4、不同类型可以并发执行。<br>5、大部分情况使用tasklet。</p>
+</li>
+<li><p>工作队列： </p>
+<p>1、由内核线程去执行，换句话说总在进程上下文执行。<br>2、可以睡眠，阻塞。</p>
+</li>
+</ul>
+<h3 id="GDB-常见的调试命令"><a href="#GDB-常见的调试命令" class="headerlink" title="GDB 常见的调试命令"></a>GDB 常见的调试命令</h3><p>gcc -g加入调试信息，不然无法调试</p>
+<p>b设置断点，r运行程序，c继续执行，p打印指定值，s进入函数体，n单步运行（不进入函数体），q终止调试</p>
+<p>info b 查看断点信息</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230714104538264.png" alt="image-20230714104538264"></p>
+<p>d + num 删除断点</p>
+<p>layout src 显示C语言界面</p>
+<p>layout asm 显示汇编界面</p>
+<p><strong>gdb 怎么追踪一个变量？</strong></p>
+<p>gdb watch</p>
+<ul>
+<li><p>watch 命令：设置观察点</p>
+</li>
+<li><p>rwatch 命令：设置读观察点</p>
+</li>
+<li><p>awatch 命令：设置读写观察点</p>
+</li>
+</ul>
+<p><strong>gdb调试时遇到程序崩溃，如何查看详细信息?</strong></p>
+<p><a target="_blank" rel="noopener" href="https://linuxcpp.0voice.com/?id=88071">gdb调试时遇到程序崩溃，如何查看详细信息-高性能服务器开发 (0voice.com)</a></p>
+<ul>
+<li>使用backtrace命令查看堆栈跟踪信息：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) backtrace</span><br></pre></td></tr></table></figure>
+
+<p>该命令会输出当前函数调用链上所有已进入但未退出的函数的信息，以及它们各自的参数和返回值。</p>
+<ul>
+<li>使用info命令查看程序状态：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(gdb) info threads    # 查看线程列表</span><br><span class="line">(gdb) info registers  # 查看寄存器值</span><br><span class="line">(gdb) info variables  # 查看当前作用域内的变量</span><br><span class="line">(gdb) info frame      # 查看当前帧信息</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用print或x命令查看变量内容：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) print var_name  # 输出一个变量的值</span><br><span class="line">(gdb) x/nfu addr     # 输出内存地址addr处n个长度为f字节的数据，例如：x/4xb &amp;var_name</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>可以使用set logging on&#x2F;off来打开或关闭日志记录。日志记录会将gdb运行期间所有输入和输出保存到指定文件中，以便后续分析。</p>
+</li>
+<li><p>可以使用catch命令设置异常断点，并使程序在特定条件下停止执行。例如，在发生段错误时停止执行：</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) catch signal SIGSEGV </span><br></pre></td></tr></table></figure>
+
+<p>以上是一些常用的gdb调试命令，通过这些命令可以获取更多关于程序崩溃原因的信息。</p>
+<h3 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h3><p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230825192849382.png" alt="image-20230825192849382"></p>
+<p>进程对信号的处理方法有三种：</p>
+<ul>
+<li><p>第一种方法是，<strong>忽略某个信号</strong>，对该信号不做任何处理，就象未发生过一样。</p>
+</li>
+<li><p>第二种是设置<strong>中断的处理函数</strong>，收到信号后，由该函数来处理。</p>
+</li>
+<li><p>第三种方法是，对该信号的处理采用<strong>系统的默认操作</strong>，大部分的信号的默认操作是终止进程。</p>
+</li>
+</ul>
+<h3 id="线程和进程"><a href="#线程和进程" class="headerlink" title="线程和进程"></a>线程和进程</h3><p>使用POSIX线程库（pthread）来创建线程，以及使用系统调用（fork）来创建进程。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> result = <span class="built_in">pthread_create</span>(&amp;threadId, <span class="literal">nullptr</span>, threadFunc, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">result = <span class="built_in">pthread_join</span>(threadId, <span class="literal">nullptr</span>);</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="number">0</span>) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;无法等待线程结束，错误码：&quot;</span> &lt;&lt; result &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">-1</span>) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;无法创建进程&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 子进程执行的代码逻辑</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;这是子进程&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 父进程执行的代码逻辑</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;这是父进程&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="硬链接与软链接的区别？"><a href="#硬链接与软链接的区别？" class="headerlink" title="硬链接与软链接的区别？"></a>硬链接与软链接的区别？</h3><p>本质：</p>
+<p>硬链接：本质是同一个文件</p>
+<p>软链接：本质不是同一个文件</p>
+<p>硬链接相当于原文件的别名，都指向源文件的节点，对硬链接文件进行删除等操作不会影响彼此。</p>
+<p>软链接相当于快捷方式，保存的是原文件的路径信息，原文件移动或者删除，软链接失效。</p>
+<p><img src="https://img-blog.csdnimg.cn/92267532d0724cdead749b850795036d.jpg" alt="92267532d0724cdead749b850795036d.jpg"></p>
+<h3 id="互斥与同步"><a href="#互斥与同步" class="headerlink" title="互斥与同步"></a>互斥与同步</h3><h4 id="二值信号量和互斥量区别"><a href="#二值信号量和互斥量区别" class="headerlink" title="二值信号量和互斥量区别"></a>二值信号量和互斥量区别</h4><ul>
+<li>互斥量用于保护一段代码或一个临界区域，二值信号量主要用于控制对单一资源的访问。</li>
+<li>互斥量具有优先级继承功能，信号量没有。</li>
+<li>互斥量的加锁和解锁必须由同一线程分别对应使用，信号量可以由一个线程释放，另一个线程得到。</li>
+</ul>
+<h4 id="互斥量和信号量的区别"><a href="#互斥量和信号量的区别" class="headerlink" title="互斥量和信号量的区别"></a>互斥量和信号量的区别</h4><ul>
+<li>互斥量用于线程的互斥，信号量用于线程的同步。</li>
+<li>互斥量值只能为0&#x2F;1，信号量值可以为非负整数。</li>
+<li>互斥量的加锁和解锁必须由同一线程分别对应使用，信号量可以由一个线程释放，另一个线程得到。</li>
+</ul>
+<h4 id="多线程下怎么喂狗"><a href="#多线程下怎么喂狗" class="headerlink" title="多线程下怎么喂狗"></a>多线程下怎么喂狗</h4><p>把喂狗放在低优先级的线程中，其他线程卡死，喂狗就运行不了</p>
+<h2 id="FreeRTOS"><a href="#FreeRTOS" class="headerlink" title="FreeRTOS"></a><strong>FreeRTOS</strong></h2><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/discuss/393545809554325504?sourceSSR=search">嵌入式开发 FreeRTOS知识点总结_牛客网 (nowcoder.com)</a></p>
+<p><a href="./%E5%85%AB%E8%82%A1/FreeRTOS%E5%AE%8C%E5%85%A8%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E4%B9%8B%E4%B8%8A%E5%86%8C_%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.pdf">FreeRTOS完全开发手册之上册_快速入门</a></p>
+<h3 id="核心文件"><a href="#核心文件" class="headerlink" title="核心文件"></a>核心文件</h3><p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230828165333778.png" alt="image-20230828165333778"></p>
+<p>主要涉及2个目录：</p>
+<ul>
+<li><p>Demo</p>
+<ul>
+<li>Demo目录下是工程文件，以”芯片和编译器”组合成一个名字</li>
+<li>比如：CORTEX_STM32F103_Keil</li>
+</ul>
+</li>
+<li><p>Source</p>
+<ul>
+<li>根目录下是核心文件，这些文件是通用的</li>
+<li>portable目录下是移植时需要实现的文件<ul>
+<li>目录名为：[compiler]&#x2F;[architecture]</li>
+<li>比如：RVDS&#x2F;ARM_CM3，这表示cortexM3架构在RVDS工具上的移植文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21513281/article/details/121243362">FreeRTOS Heap_1、Heap_2、Heap_3、Heap_4、Heap_5的区别_</a></p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230828164549706.png" alt="image-20230828164549706"></p>
+<p><strong>内存管理heap4，什么时候合并内存碎片</strong></p>
+<p>在Heap4中，内存碎片的合并是在内存释放操作时进行的。当使用Heap4进行内存分配时，内存被分为多个内存块，每个内存块都有一个头部结构来跟踪其状态和大小。当某个内存块被释放时，Heap4会检查该内存块与相邻内存块的状态，如果相邻的内存块也是空闲状态，Heap4会将它们合并成一个更大的内存块。</p>
+<h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45921925/article/details/129120528">FreeRTOS基础之任务调度机制_freertos任务调度机制</a></p>
+<p>第一种：具有时间片的优先级抢先调度 Prioritized Pre-emptive Scheduling with Time Slicing</p>
+<p>第二种：优先级抢先调度（无时间片）Prioritized Pre-emptive Scheduling (without Time Slicing)</p>
+<p>第三种：合作调度Co-operative Scheduling</p>
+<h3 id="任务通信"><a href="#任务通信" class="headerlink" title="任务通信"></a>任务通信</h3><h4 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h4><h5 id="常规操作"><a href="#常规操作" class="headerlink" title="常规操作"></a>常规操作</h5><p>队列的简化操如入下图所示，从此图可知：</p>
+<ul>
+<li><p>队列可以包含若干个数据：队列中有若干项，这被称为”长度”(length)</p>
+</li>
+<li><p>每个数据大小固定</p>
+</li>
+<li><p>创建队列时就要指定长度、数据大小</p>
+</li>
+<li><p>数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读</p>
+</li>
+<li><p>也可以强制写队列头部：覆盖头部数据</p>
+</li>
+</ul>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230828170055925.png" alt="image-20230828170055925"></p>
+<h5 id="传输数据的两种方法"><a href="#传输数据的两种方法" class="headerlink" title="传输数据的两种方法"></a>传输数据的两种方法</h5><p>使用队列传输数据时有两种方法：</p>
+<ul>
+<li><p><strong>拷贝</strong>：把数据、把变量的值复制进队列里</p>
+</li>
+<li><p><strong>引用</strong>：把数据、把变量的地址复制进队列里</p>
+</li>
+</ul>
+<h5 id="队列的阻塞访问"><a href="#队列的阻塞访问" class="headerlink" title="队列的阻塞访问"></a>队列的阻塞访问</h5><p>如果读写不成功，则阻塞；可以指定超时时间。如果能读写了就马上进入就绪态，否则就阻塞直到超时。</p>
+<p>多个任务阻塞看<strong>优先级和等待时间</strong></p>
+<h5 id="如何分辨数据源？"><a href="#如何分辨数据源？" class="headerlink" title="如何分辨数据源？"></a>如何分辨数据源？</h5><p>当有多个发送任务，通过同一个队列发出数据，接收任务如何分辨数据来源？</p>
+<p>数据本身带有”来源”信息，比如写入队列的数据是一个结构体，结构体中的lDataSouceID用来表示数据来源：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123; </span><br><span class="line">	ID_t eDataID; </span><br><span class="line">	<span class="type">int32_t</span> lDataValue; </span><br><span class="line">&#125;Data_t;</span><br></pre></td></tr></table></figure>
+
+<p>不同的发送任务，先构造好结构体，填入自己的 eDataID ，再写队列；接收任务读出数据后，根据eDataID 就可以知道数据来源了。</p>
+<h5 id="如何传输大块数据？"><a href="#如何传输大块数据？" class="headerlink" title="如何传输大块数据？"></a>如何传输大块数据？</h5><p>当传输大字节（比如1000字节）的结构体时，用引用传递，传递地址</p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p>信号量这个名字很恰当：</p>
+<ul>
+<li><p>信号：起通知作用</p>
+</li>
+<li><p>量：还可以用来表示资源的数量</p>
+<ul>
+<li>当”量”没有限制时，它就是”计数型信号量”(Counting Semaphores)</li>
+<li>当”量”只有0、1两个取值时，它就是”二进制信号量”(Binary Semaphores)</li>
+</ul>
+</li>
+<li><p>支持的动作：”give”给出资源，计数值加1；”take”获得资源，计数值减1</p>
+</li>
+</ul>
+<h5 id="防止数据丢失"><a href="#防止数据丢失" class="headerlink" title="防止数据丢失"></a><strong>防止数据丢失</strong></h5><p>发送任务发出3次”提醒”，但是接收任务只接收到1次”提醒”，其中2次”提醒”丢失了。这种情况很常见，比如每接收到一个串口字符，串口中断程序就给任务发一次”提醒”，假设收到多个字符、发出了多次”提醒”。当任务来处理时，它只能得到1次”提醒”。</p>
+<p>你需要使用其他方法来防止数据丢失，比如：</p>
+<ul>
+<li><p>在串口中断中，把数据放入缓冲区</p>
+</li>
+<li><p>在任务中，一次性把缓冲区中的数据都读出</p>
+</li>
+<li><p>简单地说，就是：你提醒了我多次，我太忙只响应你一次，但是我一次性拿走所有数据</p>
+</li>
+</ul>
+<h4 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h4><h5 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h5><p>谁上锁就由谁来解锁，但FreeRTOS并未实现。</p>
+<h5 id="优先级反转"><a href="#优先级反转" class="headerlink" title="优先级反转"></a><strong>优先级反转</strong></h5><p>假设任务A、B都想使用串口，A优先级比较低：</p>
+<ul>
+<li><p>任务A获得了串口的互斥量</p>
+</li>
+<li><p>任务B也想使用串口，它将会阻塞、等待A释放互斥量</p>
+</li>
+<li><p>高优先级的任务，被低优先级的任务延迟，这被称为”优先级反转”(priority inversion)</p>
+</li>
+</ul>
+<p>解决办法：</p>
+<h5 id="优先级继承"><a href="#优先级继承" class="headerlink" title="优先级继承"></a>优先级继承</h5><ul>
+<li><p>假设持有互斥锁的是任务A，如果更高优先级的任务B也尝试获得这个锁</p>
+</li>
+<li><p>任务B说：你既然持有宝剑，又不给我，那就继承我的愿望吧</p>
+</li>
+<li><p>于是任务A就继承了任务B的优先级</p>
+</li>
+<li><p>这就叫：优先级继承</p>
+</li>
+<li><p>等任务A释放互斥锁时，它就恢复为原来的优先级</p>
+</li>
+<li><p>互斥锁内部就实现了优先级的提升、恢复</p>
+</li>
+</ul>
+<h4 id="事件组"><a href="#事件组" class="headerlink" title="事件组"></a>事件组</h4><p>事件组可以简单地认为就是一个整数：</p>
+<ul>
+<li><p>每一位表示一个事件</p>
+</li>
+<li><p>每一位事件的含义由程序员决定，比如：Bit0表示用来串口是否就绪，Bit1表示按键是否被按下</p>
+</li>
+<li><p>这些位，值为1表示事件发生了，值为0表示事件没发生</p>
+</li>
+<li><p>一个或多个任务、ISR都可以去写这些位；一个或多个任务、ISR都可以去读这些位</p>
+</li>
+<li><p>可以等待某一位、某些位中的任意一个，也可以等待多位</p>
+</li>
+</ul>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230828183257076.png" alt="image-20230828183257076"></p>
+<p>事件组用一个整数来表示，其中的高8位留给内核使用，只能用其他的位来表示事件。那么这个整数是<br>多少位的？</p>
+<ul>
+<li>如果configUSE_16_BIT_TICKS是1，那么这个整数就是16位的，低8位用来表示事件</li>
+<li>如果configUSE_16_BIT_TICKS是0，那么这个整数就是32位的，低24位用来表示事</li>
+<li>configUSE_16_BIT_TICKS是用来表示Tick Count的，怎么会影响事件组？这只是基于效率来考虑<ul>
+<li>如果configUSE_16_BIT_TICKS是1，就表示该处理器使用16位更高效，所以事件组也使用16<br>位</li>
+<li>如果configUSE_16_BIT_TICKS是0，就表示该处理器使用32位更高效，所以事件组也使用32<br>位</li>
+</ul>
+</li>
+</ul>
+<p>使用事件组可以同时给多个任务发送事件。</p>
+<h4 id="任务通知"><a href="#任务通知" class="headerlink" title="任务通知"></a>任务通知</h4><h5 id="优势及劣势"><a href="#优势及劣势" class="headerlink" title="优势及劣势"></a>优势及劣势</h5><p>任务通知的优势：</p>
+<ul>
+<li><p>效率更高：使用任务通知来发送事件、数据给某个任务时，效率更高。比队列、信号量、事件组都有大的优势。</p>
+</li>
+<li><p>更节省内存：使用其他方法时都要先创建对应的结构体，使用任务通知时无需额外创建结构体。</p>
+</li>
+</ul>
+<p>任务通知的限制</p>
+<ul>
+<li><p>不能发送数据给ISR</p>
+<p>ISR并没有任务结构体，所以无法使用任务通知的功能给ISR发送数据。但是ISR可以使用任务通知的功能，发数据给任务</p>
+</li>
+<li><p>数据只能给该任务独享</p>
+</li>
+<li><p>无法缓冲数据</p>
+</li>
+<li><p>无法广播给多个任务</p>
+</li>
+<li><p>如果发送受阻，发送方无法进入阻塞状态等待</p>
+</li>
+</ul>
+<h5 id="通知状态和通知值"><a href="#通知状态和通知值" class="headerlink" title="通知状态和通知值"></a><strong>通知状态和通知值</strong></h5><p>每个任务都有一个结构体：TCB(Task Control Block)，里面有2个成员：</p>
+<ul>
+<li><p>一个是uint8_t类型，用来表示通知状态</p>
+</li>
+<li><p>一个是uint32_t类型，用来表示通知值</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">tskTaskControlBlock</span> </span><br><span class="line">&#123; </span><br><span class="line">    ...... </span><br><span class="line">    <span class="comment">/* configTASK_NOTIFICATION_ARRAY_ENTRIES = 1 */</span> </span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">uint32_t</span> ulNotifiedValue[ configTASK_NOTIFICATION_ARRAY_ENTRIES ]; </span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">uint8_t</span> ucNotifyState[ configTASK_NOTIFICATION_ARRAY_ENTRIES ]; </span><br><span class="line">    ...... </span><br><span class="line">&#125; tskTCB;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>通知状态有3种取值：</p>
+<ul>
+<li><p>taskNOT_WAITING_NOTIFICATION：任务没有在等待通知</p>
+</li>
+<li><p>taskWAITING_NOTIFICATION：任务在等待通知</p>
+</li>
+<li><p>taskNOTIFICATION_RECEIVED：任务接收到了通知，也被称为pending(有数据了，待处理)</p>
+</li>
+</ul>
+<p>通知值可以有很多种类型：</p>
+<ul>
+<li><p>计数值</p>
+</li>
+<li><p>位(类似事件组)</p>
+</li>
+<li><p>任意数值</p>
+</li>
+</ul>
+<h4 id="软件定时器"><a href="#软件定时器" class="headerlink" title="软件定时器"></a>软件定时器</h4><p>基于系统滴答中断(Tick Interrupt)</p>
+<p>在守护任务中执行，当FreeRTOS的配置项 configUSE_TIMERS 被设置为1时，在启动调度器时，会自动创建RTOS</p>
+<p>Damemon Task。</p>
+<h4 id="中断管理"><a href="#中断管理" class="headerlink" title="中断管理"></a>中断管理</h4><h5 id="为什么需要两套API"><a href="#为什么需要两套API" class="headerlink" title="为什么需要两套API"></a><strong>为什么需要两套API</strong></h5><ul>
+<li><p>很多API函数会导致任务计入阻塞状态：</p>
+<ul>
+<li>运行这个函数的<strong>任务</strong>进入阻塞状态</li>
+<li>比如写队列时，如果队列已满，可以进入阻塞状态等待一会</li>
+</ul>
+</li>
+<li><p>ISR调用API函数时，ISR不是”任务”，ISR不能进入阻塞状态</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://pym999.github.io/2023/08/29/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">嵌入式</div>
+      </a>
+    
+  </nav>
+
+  
+   
+  
+   
+    <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
+    <div id="twikoo" class="twikoo"></div>
+    <script>
+        twikoo.init({
+            envId: ""
+        })
+    </script>
+ 
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2023
+        <i class="ri-heart-fill heart_icon"></i> YiMing Pan
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="人才公海"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+ 
+<script src="/js/clickLove.js"></script>
+ 
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+<!-- CanvasBackground -->
+ 
+<script src="/js/dz.js"></script>
+ 
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
