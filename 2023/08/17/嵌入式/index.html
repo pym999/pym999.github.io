@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>嵌入式 |  人才公海</title>
+      <title>嵌入式 |  给个机会</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -74,13 +74,17 @@
     <div class="article-meta">
       <a href="/2023/08/17/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="article-date">
   <time datetime="2023-08-17T11:49:11.000Z" itemprop="datePublished">2023-08-17</time>
-</a>   
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">13.5k</span>
+            <span class="post-count">14.2k</span>
         </span>
     </span>
 
@@ -89,7 +93,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">51 分钟</span>
+            <span class="post-count">54 分钟</span>
         </span>
     </span>
 </div>
@@ -443,6 +447,10 @@
 <h3 id="USB"><a href="#USB" class="headerlink" title="USB"></a>USB</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/q15873584778/article/details/128095100?spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-16-128095100-blog-85759974.235%5Ev38%5Epc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-16-128095100-blog-85759974.235%5Ev38%5Epc_relevant_sort_base3&utm_relevant_index=21">USB协议入门解析_usb协议解析_</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44760112/article/details/126088772">usb 传输协议_usb协议_秋绘の枫的博客-CSDN博客</a></p>
 <p><strong>低位先行</strong></p>
+<p>USB2.0支持的三种传输速度：</p>
+<p>1、低速模式，1.5Mbps，换算成字节：187KB&#x2F;S;</p>
+<p>2、全速模式，12Mbps，换算成字节：1.5MB&#x2F;S;</p>
+<p>3、高速模式，480Mbps，换算成字节：60MB&#x2F;S，实际不超过25MB&#x2F;S。</p>
 <p>硬件：</p>
 <p>USB芯片也分为Controller部分和PHY部分。Controller部分主要实现USB的协议和控制。内部逻辑主要有MAC层、CSR层和FIFO控制层，还有其他低功耗管理之类层次。MAC实现按USB协议进行数据包打包和解包，并把数据按照UTMI总线格式发送给PHY（USB3.0为PIPE）。CSR层进行寄存器控制，软件对USB芯片的控制就是通过CSR寄存器，这部分和CPU进行交互访问，主要作为Slave通过AXI或者AHB进行交互。FIFO控制层主要是和DDR进行数据交互，控制USB从DDR搬运数据的通道，主要作为Master通过AXI&#x2F;AHB进行交互。PHY部分功能主要实现并转串的功能，把UTMI或者PIPE口的并行数据转换成串行数据，再通过差分数据线输出到芯片外部。</p>
 <p>USB四层描述符，每个USB设备都可以有多个配置，配置就相当于功能，一个配置可以有多个接口，接口是逻辑上的概念，接口之间隔离互不干扰。一个接口可以有多个端点，它是数据交互的实体，相当于缓冲区，存放和发送usb数据，端点是一对一连接的，只支持一个方向的数据传输。端点0每个设备都拥有，用来对逻辑设备进行配置，端点0在上电和接入的时候就被配置。</p>
@@ -487,7 +495,7 @@
 <p><img src="https://inews.gtimg.com/newsapp_bt/0/15072494473/1000" alt="img"></p>
 <p>根据PID划分，包的类型包括令牌、数据、握手或特殊四种信息包类型。</p>
 <p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230714101237417.png" alt="image-20230714101237417"></p>
-<p>DATA0和DATA1使主机能与设各维持同步，且作为帧错之用。例如，如果两个连续的DATA0 被接收到的话，意味着DATA1封包被遗漏掉，并产生了错误的状况。</p>
+<p>DATA0和DATA1使主机能与设备维持同步，且作为帧错之用。例如，如果两个连续的DATA0 被接收到的话，意味着DATA1封包被遗漏掉，并产生了错误的状况。</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/256232317">USB 之四大传输方式（五） - 知乎 (zhihu.com)</a></p>
 <p><strong>控制传输：</strong>（三次事务）</p>
 <p>控制传输是用来传送控制信息的，控制传输可以分为三个阶段：建立阶段—&gt;数据阶段(不必须)—&gt;状态信息阶段。</p>
@@ -557,6 +565,31 @@
 <p>URB就相当于数据传输时使用到的句柄，包含状态、管道等重要信息。</p>
 <p><strong>URB 处理流程</strong></p>
 <p>（1）usb 设备驱动程序创建并初始化一个访问特定usb设备特定端点的 urb，并提交给 usb core；<br>（2）usb core 提交该 urb 到 usb 主控制器驱动程序；<br>（3）usb 主控制器驱动程序根据 urb 描述的信息，来访问 usb 设备；<br>（4）当设备访问结束后，usb 主控制器驱动程序通知 usb core（调用这个函数usb_complete_t complete;）然后其再通知usb设备驱动程序。</p>
+<h3 id="检测错误的协议类型"><a href="#检测错误的协议类型" class="headerlink" title="检测错误的协议类型"></a>检测错误的协议类型</h3><h4 id="奇偶校验"><a href="#奇偶校验" class="headerlink" title="奇偶校验"></a>奇偶校验</h4><ul>
+<li><p>奇校验</p>
+<p>判断数据当中1的个数是否为奇数，具体为统计原始数据1的个数，如果为奇数在最后加0，如果是偶数在最后加1</p>
+</li>
+<li><p>偶校验</p>
+<p>判断数据当中1的个数是否为偶数，具体为统计原始数据1的个数，如果为偶数在最后加0，如果是奇数在最后加1</p>
+</li>
+</ul>
+<h4 id="CRC校验"><a href="#CRC校验" class="headerlink" title="CRC校验"></a>CRC校验</h4><ol>
+<li>选择生成多项式：首先需要选择一个生成多项式，通常表示为一个二进制数。生成多项式决定了CRC校验的性能和检测能力。常用的生成多项式有CRC-16和CRC-32等。</li>
+<li>初始化寄存器：将CRC寄存器初始化为一个预定义的值，通常为全1或全0，取决于具体的CRC算法。</li>
+<li>处理数据：对待校验的数据进行处理。<ul>
+<li>对于每个输入数据位（从高位到低位）：<ul>
+<li>将CRC寄存器的最高位（MSB）与当前输入数据位进行异或操作。如果当前输入数据位为1，则进行异或；如果为0，则不进行异或。</li>
+<li>将CRC寄存器向左移动一位，丢弃最高位，空出最低位。</li>
+<li>如果上一步进行了异或操作，则将生成多项式与CRC寄存器的最低位进行异或操作，以保持CRC寄存器的位数不变。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>重复处理：重复上述数据处理过程，直到所有数据位都被处理完毕。</li>
+<li>输出校验值：最终得到的CRC寄存器的值即为校验值，用于检测数据传输中的错误。</li>
+<li>校验结果和传输数据：将校验值附加在传输的数据中，一起发送给接收方。</li>
+<li>接收方校验：接收方使用相同的生成多项式和校验算法，对接收到的数据进行CRC校验。接收方将接收到的数据和校验值输入CRC校验算法，并进行计算。如果接收方计算得到的校验值与接收到的校验值相同，说明数据传输没有错误；如果校验值不匹配，说明数据可能受到了损坏或错误。</li>
+</ol>
 <h2 id="嵌入式开发流程"><a href="#嵌入式开发流程" class="headerlink" title="嵌入式开发流程"></a>嵌入式开发流程</h2><h3 id="开发环境搭建"><a href="#开发环境搭建" class="headerlink" title="开发环境搭建"></a>开发环境搭建</h3><p><img src="E:\研究生学习\毕业相关\工作应聘\images\开发板环境搭建.png" alt="image-20230703113800378"></p>
 <h4 id="交叉编译工具"><a href="#交叉编译工具" class="headerlink" title="交叉编译工具"></a>交叉编译工具</h4><p><a target="_blank" rel="noopener" href="https://www.crifan.com/files/doc/docbook/cross_compile/release/html/cross_compile.html">交叉编译详解 </a></p>
 <p>交叉编译器的（前缀）的名字的命名规则是：</p>
@@ -1068,13 +1101,17 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/favicon.ico" alt="人才公海"></a>
+    <a href="/"><img src="/favicon.ico" alt="给个机会"></a>
   </div>
   
   <ul class="nav nav-main">
     
     <li class="nav-item">
       <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
     </li>
     
   </ul>
