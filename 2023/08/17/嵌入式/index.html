@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>嵌入式 |  给个机会</title>
+      <title>嵌入式 |  名的博客</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -84,7 +84,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">14.2k</span>
+            <span class="post-count">17k</span>
         </span>
     </span>
 
@@ -93,7 +93,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">54 分钟</span>
+            <span class="post-count">64 分钟</span>
         </span>
     </span>
 </div>
@@ -111,9 +111,111 @@
   <p>ARM \ STM32 \ 通信协议</p>
 <span id="more"></span>
 
-<p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/issue/tutorial?zhuanlanId=jvN8gj&uuid=7bc05109df9a46529771b42f22008f33">嵌入式学习攻略（久等了） - 牛客网 (nowcoder.com)</a></p>
+<h1 id="嵌入式"><a href="#嵌入式" class="headerlink" title="嵌入式"></a>嵌入式</h1><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/issue/tutorial?zhuanlanId=jvN8gj&uuid=7bc05109df9a46529771b42f22008f33">嵌入式学习攻略（久等了） - 牛客网 (nowcoder.com)</a></p>
 <h2 id="项目管理"><a href="#项目管理" class="headerlink" title="项目管理"></a>项目管理</h2><h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45432729/article/details/130538866"> Git保姆级使用教程，超详细，带你了解常用Git命令！</a></p>
+<h3 id="Cmake"><a href="#Cmake" class="headerlink" title="Cmake"></a>Cmake</h3><p><strong>简单示例</strong></p>
+<p>下面是一个简单的示例，说明了如何使用CMake构建一个简单的C++项目：</p>
+<p>假设我们有以下项目结构：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">project/</span><br><span class="line">    src/</span><br><span class="line">        main.cpp</span><br><span class="line">    include/</span><br><span class="line">        hello.h</span><br><span class="line">    CMakeLists.txt</span><br></pre></td></tr></table></figure>
+
+<p>CMakeLists.txt文件内容如下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)  <span class="comment"># 指定CMake最低版本</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(MyProject)  <span class="comment"># 设置项目名称</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加可执行文件目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(MyExecutable</span><br><span class="line">    src/main.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加头文件搜索路径</span></span><br><span class="line"><span class="keyword">target_include_directories</span>(MyExecutable</span><br><span class="line">    PRIVATE <span class="keyword">include</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>上述CMakeLists.txt文件中的几个关键指令说明如下：</p>
+<ul>
+<li><code>cmake_minimum_required(VERSION 3.0)</code>：指定CMake的最低版本要求。</li>
+<li><code>project(MyProject)</code>：设置项目名称为”MyProject”。</li>
+<li><code>add_executable(MyExecutable src/main.cpp)</code>：添加一个名为”MyExecutable”的可执行文件目标，并将<code>src/main.cpp</code>作为源文件。</li>
+<li><code>target_include_directories(MyExecutable PRIVATE include)</code>：添加头文件搜索路径，使得编译器能够找到<code>include</code>目录中的头文件。</li>
+</ul>
+<p>通过上述CMake配置文件，我们可以完成以下操作：</p>
+<ol>
+<li>简化编译过程：只需要在终端中执行<code>cmake .</code>命令，CMake会根据CMakeLists.txt文件生成相应的构建系统文件（如Makefile）。</li>
+<li>跨平台构建：CMake可以根据不同的操作系统和编译器生成适用于它们的构建系统文件，例如Makefile、Visual Studio项目文件等。</li>
+<li>管理依赖和头文件：通过<code>target_include_directories</code>指令，可以指定头文件的搜索路径，使得编译器能够正确地找到需要包含的头文件。</li>
+<li>管理源文件：通过<code>add_executable</code>指令，可以将源文件添加到项目中，并生成可执行文件。</li>
+</ol>
+<p><strong>复杂示例</strong></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.12</span>)  <span class="comment"># 指定CMake最低版本</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(MyProject)  <span class="comment"># 设置项目名称</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加编译选项</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;$&#123;CMAKE_CXX_FLAGS&#125; -Wall&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置输出目录</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_RUNTIME_OUTPUT_DIRECTORY <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>/bin)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_LIBRARY_OUTPUT_DIRECTORY <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>/lib)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_ARCHIVE_OUTPUT_DIRECTORY <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>/lib)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加源文件</span></span><br><span class="line"><span class="keyword">set</span>(SOURCES</span><br><span class="line">    src/main.cpp</span><br><span class="line">    src/foo.cpp</span><br><span class="line">    src/bar.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加头文件搜索路径</span></span><br><span class="line"><span class="keyword">include_directories</span>(</span><br><span class="line">    <span class="keyword">include</span></span><br><span class="line">    third_party/<span class="keyword">include</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加子目录</span></span><br><span class="line"><span class="keyword">add_subdirectory</span>(third_party)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成可执行文件</span></span><br><span class="line"><span class="keyword">add_executable</span>(MyExecutable <span class="variable">$&#123;SOURCES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接第三方库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(MyExecutable ThirdPartyLibrary)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a><strong>Makefile</strong></h3><p>1.规则</p>
+<p>目标文件：依赖文件</p>
+<p>【TAB】代码</p>
+<p>当目标文件不存在或者依赖文件比目标文件新时执行代码</p>
+<p>2.通配符</p>
+<p>%.o:%.c</p>
+<p>$@ 表示目标</p>
+<p>$&lt; 表示第一个依赖文件</p>
+<p>$^ 表示所有依赖文件</p>
+<p>3.假想目标 .PHONY: clean</p>
+<p>不会和名为clean的文件冲突</p>
+<p>4.即时变量、延时变量、export</p>
+<p>A :&#x3D; xxx	A的值即刻确定，在定义的时候确定</p>
+<p>B &#x3D; xxx	B的值使用到时才确定</p>
+<p>A :&#x3D; C</p>
+<p>B &#x3D; C</p>
+<p>C &#x3D; 123</p>
+<p>all:</p>
+<p>​	@echo $(A)	#@不会显示命令本身</p>
+<p>​	@echo $(B)	#	A  （此时C未定义）</p>
+<p>​								  B 123</p>
+<p>:&#x3D;	即时变量</p>
+<p>&#x3D;	延时变量</p>
+<p>?&#x3D;	延时变量，如果第一次定义才有效，前面已定义则忽略</p>
+<p>+&#x3D;	附加，取决前面定义是即时变量还是延时变量</p>
+<h3 id="Cmake与Make区别"><a href="#Cmake与Make区别" class="headerlink" title="Cmake与Make区别"></a>Cmake与Make区别</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hhddd-1024/p/17077184.html#%E4%B8%A4%E8%80%85%E5%8C%BA%E5%88%AB">天上人间 (cnblogs.com)</a></p>
+<p>梳理一下 <code>cmake</code> 、<code>make</code>、 <code>gcc</code> 以及的关系：</p>
+<ul>
+<li>cmake ：根据指定的 CMakeLists.txt 文件，跨平台来生成对应平台的 makefile 文件；</li>
+<li>make ：可以看作一个智能的批处理工具，本身没有编译和链接功能，而是通过调用 makefile 文件中用户指定的命令来进行编译和链接的；</li>
+<li>gcc：即 GNU Compiler Collection（GNU 编译器套件），也可以理解为编译器，可用于编译很多种编程语言（如：C、C++、Objective-C、Java 等）；</li>
+</ul>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\7fe84e2fa7c747b5b7b9b3a6ffb24b7b.png" alt="img"></p>
 <h2 id="ARM"><a href="#ARM" class="headerlink" title="ARM"></a>ARM</h2><h3 id="CPU架构"><a href="#CPU架构" class="headerlink" title="CPU架构"></a>CPU架构</h3><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/325968121/answer/2316378676">ARM、MIPS、RISC-V三种指令集本质上有何区别？ - 知乎 (zhihu.com)</a></p>
+<p>Arm的RISC体系结构的发展中已经提供了低功耗、小体积、高性能的方案。而为了解决代码长度的问题，Arm体系结构又增加了T变种，开发了一种新的指令体系，这就是Thumb指令集，它是Arm技术的一大特色。</p>
+<p>ARM Cortex-M4 采用了 16 位和 32 位指令并存的 Thumb-2 指令集，这样处理器就不用再 ARM 和 Thumb 两种状态间来回切换了。</p>
+<p><strong>ARM Cortex-M7和M4区别</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ARM Cortex-M7</th>
+<th>ARM Cortex-M4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MCU</td>
+<td>I.MX1060</td>
+<td>STM32F407、GD32F450、FS32K144</td>
+</tr>
+<tr>
+<td>主频和性能</td>
+<td>600 MHz、更深的流水线和更大的指令窗口</td>
+<td><em>168MHz</em></td>
+</tr>
+<tr>
+<td>浮点运算性能</td>
+<td>具备FPU</td>
+<td>无FPU，通过软件库来实现浮点运算</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>更大的指令和数据缓存</td>
+<td>缓存容量较小</td>
+</tr>
+<tr>
+<td>中断处理能力</td>
+<td>支持更多的中断优先级、可以实现更细粒度的中断控制和优先级管理</td>
+<td>&#x2F;</td>
+</tr>
+<tr>
+<td>功耗</td>
+<td>相同的主频消耗更多的功耗</td>
+<td>&#x2F;</td>
+</tr>
+</tbody></table>
 <h3 id="arm概念"><a href="#arm概念" class="headerlink" title="arm概念"></a>arm概念</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2092048?areaSource=102001.1&traceId=XAqHP_NnSh14y3PpU2jiq">arm的一些概念(ARM9、Cortex的区别)-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
 <p>ARM7：ARMv4架构，ARM9：ARMv5架构，ARM11：ARMv6架构，ARM-Cortex 系列：ARMv7架构。</p>
 <h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><h4 id="中断概念"><a href="#中断概念" class="headerlink" title="中断概念"></a>中断概念</h4><p>中断（Interrupt）是指由硬件或软件触发的一种机制，用于暂停当前正在执行的程序或处理，以便处理优先级更高的事件或请求。当发生中断时，CPU会立即停止当前的操作，并转而执行与中断相关的处理程序，处理完后再返回原来的执行点。</p>
@@ -143,7 +245,7 @@
 <ul>
 <li>Reset：复位中断，嵌入式SoC复位以后进入到复位中断，可以在复位中断函数里面进行一些相关的初始化工作，例如初始化SP、DDR等外设等；</li>
 <li>Undefined Instruction：未定义指令中断，当处理器不能识别指令的话将会产生该中断；</li>
-<li>Supervisor Call：SVC指令中断，Supervisor用户调用SVC指令请求Supervisor功能，处理器将进入到超级用户模式，通常用来请求操作系统功能，对于以前的ARM体系架构，SVC指令也叫做SWI，即软件中断；</li>
+<li>Supervisor Call：SVC指令中断，Supervisor用户调用SVC指令请求Supervisor功能，处理器将进入到超级用户模式，通常用来请求操作系统功能，对于以前的ARM体系架构，SVC指令也叫做SWI，即<strong>软件中断</strong>；</li>
 <li>Prefetch Abort：指令预取中止中断，当处理器预取指令出错的时候将会产生此中断；</li>
 <li>Data Abort：数据访问中止中断，当处理器访问数据出错的时候会产生此种断；</li>
 <li>Not used：未使用中断；</li>
@@ -151,17 +253,48 @@
 <li>FIQ Interrupt：FIQ中断，快速中断，当想要快速处理中断的话可以使用该中断。</li>
 </ul>
 <p>ARM v7架构的CPU最多支持的<strong>中断号可以到达1020个</strong>，为ID0<del>ID1019，但是对于实际的芯片厂商并不会全部使用完这些中断号，例如：对于NXP研发的I.MX6UL芯片就只使用了160个中断号，为ID0</del>ID159，其中前32个用于SoC内核私有，并没有用到芯片外设上，ID32~ID159这些中断号就使用到了芯片外设上，</p>
-<h4 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h4><p>arm架构函数调用参数的传递（寄存器）：R0-R2，多于3个压栈</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><ul>
+<li>参数值传递按顺序存放在寄存器<strong>r0,r1,r2,r3</strong>里，超过4个参数值传递则放栈里。（x86下32位用堆栈，64位小于6个参数用寄存器，超过压栈）</li>
+<li>返回值放在<strong>R0</strong></li>
+<li>发生嵌套调用，会将<strong>R0-R3</strong>压入栈中，不会破坏数据</li>
+<li><strong>R4-R11</strong>普通的通用寄存器</li>
+<li><strong>R12</strong>寄存器在某些版本的编译器下另有它用，用户程序不能使用，因此我们在编写汇编函数时也必须对它进行压栈处理，确保它的数值不能被破坏。</li>
+<li><strong>R13</strong>寄存器是堆栈寄存器（SP），用来保存堆栈的当前指针。</li>
+<li><strong>R14</strong>寄存器是链接寄存器（LR），用来保存函数的返回地址。</li>
+<li><strong>R15</strong>寄存器是程序寄存器（PC），指向程序当前的地址。</li>
+</ul>
 <p>在 ARM 处理器中，中断处理涉及到多个<strong>寄存器</strong>。以下是一些常用的与中断处理相关的寄存器：</p>
 <ul>
-<li>CPSR（Current Program Status Register）：CPSR 是一个特殊的寄存器，用于存储当前的程序状态。在中断处理中，CPSR 的某些位用于标识当前的处理模式（例如用户模式、特权模式等）和中断使能状态。</li>
-<li>SPSR（Saved Program Status Register）：SPSR 是用于保存中断之前的程序状态的寄存器。当发生中断时，CPSR 的值会被保存到 SPSR 中，以便在中断处理完成后恢复到原来的状态。</li>
-<li>LR（Link Register）：LR 寄存器用于保存函数调用的返回地址。当处理器进入中断处理程序时，中断处理程序会将其返回地址保存到 LR 中，以便在中断处理完成后返回到原来的执行位置。</li>
-<li>PC（Program Counter）：PC 寄存器存储着当前执行的指令的地址。当发生中断时，PC 的值会被保存到 LR 中，同时中断处理程序会将中断服务例程的地址加载到 PC 中，从而开始执行中断处理程序。</li>
-<li>R0-R12（General-Purpose Registers）：这些寄存器用于存储临时数据和函数调用时的参数。在中断处理中，这些寄存器可能被用于保存中断处理过程中需要保留的临时数据。</li>
+<li><strong>CPSR</strong>（Current Program Status Register）：CPSR 是一个特殊的寄存器，<strong>用于存储当前的程序状态</strong>。在中断处理中，CPSR 的某些位用于标识当前的处理模式（例如用户模式、特权模式等）和中断使能状态。</li>
+<li><strong>SPSR</strong>（Saved Program Status Register）：SPSR 是<strong>用于保存中断之前的程序状态的寄存器</strong>。当发生中断时，CPSR 的值会被保存到 SPSR 中，以便在中断处理完成后恢复到原来的状态。</li>
+<li><strong>LR</strong>（Link Register）：LR 寄存器<strong>用于保存函数调用的返回地址</strong>。当处理器进入中断处理程序时，中断处理程序会将其返回地址保存到 LR 中，以便在中断处理完成后返回到原来的执行位置。</li>
+<li><strong>PC</strong>（Program Counter）：PC 寄存器<strong>存储着当前执行的指令的地址</strong>。当发生中断时，PC 的值会被保存到 LR 中，同时中断处理程序会将中断服务例程的地址加载到 PC 中，从而开始执行中断处理程序。</li>
+<li><strong>R0-R12</strong>（General-Purpose Registers）：这些寄存器用于存储临时数据和函数调用时的参数。在中断处理中，这些寄存器可能被用于保存中断处理过程中需要保留的临时数据。</li>
 </ul>
-<h2 id="STM32"><a href="#STM32" class="headerlink" title="STM32"></a>STM32</h2><h3 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/XYJ_Tiger/article/details/124786646">STM32启动文件讲解</a></p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\2c81e8a230ed41bca283697b393f3416.png" alt="在这里插入图片描述"></p>
+<p>保护现场</p>
+<p>(1)中断从SVC模式来，则保存SVC模式下的必要寄存器的值；<br>(2)设置IRQ栈，这样才能在IRQ处理函数中使用C语言;<br>(3)保存LR，LR保存的中断返回地址;<br>(4)保存R0～R12寄存器，因为R0～R12寄存器是IRQ模式和其他模式共用的;<br>(5)保存cpsr寄存器到spsr寄存器；</p>
+<p>恢复现场</p>
+<p>(1)把之前保存的SVC模式的R0～R12寄存器的内容恢复；<br>(2)把spsr寄存器的内容放到cpsr寄存器；<br>(3)把LR寄存器的内容放到PC寄存器中；</p>
+<h2 id="STM32"><a href="#STM32" class="headerlink" title="STM32"></a>STM32</h2><h3 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h3><ol>
+<li>从Flash启动，将Flash地址0x0800 0000映射到0x00000000，这样启动以后就相当于从0x08000000开始的，这是我们最常用的模式；</li>
+<li>从SRAM启动，将SRAM地址0x20000000映射到0x00000000，这样启动以后就相当于从0x20000000开始的，用于调试，笔者基本没用过</li>
+<li>从系统存储器启动(System memory)，将系统存储器地址0x1FFFF000映射到0x00000000，这样启动以后就相当于从0x1FFFF000开始执行的，值得注意的是这个系统存储器里面存储的其实是STM32自带的Bootloader代码，这其实是一个官方的IAP，它提供了可以通过UART1接口将用户的代码下载到Flash中的功能,然后将boot0置0，复位单片机，便可以Flash启动。注：系统内存存储器我们没办法烧写，因为他是一个只读的ROM，我们只能读取，但是可以通过从系统存储器启动，通过串口UART1烧录代码。</li>
+</ol>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230830103825326.png" alt="image-20230830103825326"></p>
+<h3 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/XYJ_Tiger/article/details/124786646">STM32启动文件讲解</a></p>
+<ol>
+<li>通过Boot引脚设定,寻找初始地址</li>
+<li>初始化栈指针 __initial_sp</li>
+<li>指向复位程序 Reset_Hander</li>
+<li>设置异常中断 HardFault_Handler</li>
+<li>设置系统时钟 SystemInit</li>
+<li>调用C库函数 _main</li>
+</ol>
 <h3 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/c413969814/article/details/130812223">一张图看懂内存(RAM，ROM，FLASH)及辅助内存之间的关系</a></p>
+<p><img src="https://img-blog.csdnimg.cn/09407e3b9833477e82bd2ef14fd2388b.png" alt="img"></p>
+<h3 id="开漏输出和推挽输出的区别"><a href="#开漏输出和推挽输出的区别" class="headerlink" title="开漏输出和推挽输出的区别"></a>开漏输出和推挽输出的区别</h3><p>对于开漏输出和推挽输出的区别最普遍的说法就是开漏输出无法真正输出高电平，即高电平时没有驱动能力，需要借助外部上拉电阻完成对外驱动。</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230830104217717.png" alt="image-20230830104217717"></p>
 <h3 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cq17805982133/article/details/122606505">STM32学习笔记＜14.时钟周期、机器周期、指令周期＞_stm32执行一条指令要几秒_小车车丶丶的博客-CSDN博客</a></p>
 <ul>
 <li><p>时钟周期</p>
@@ -175,6 +308,8 @@
 </li>
 </ul>
 <p><strong>时钟周期&lt;机器周期&lt;指令周期</strong></p>
+<h3 id="中断-1"><a href="#中断-1" class="headerlink" title="中断"></a>中断</h3><p>专栏</p>
+<p><a target="_blank" rel="noopener" href="https://sharemaker.blog.csdn.net/article/details/130937520">【明解STM32】中断系统理论基础知识篇之中断寄存器功能原理_中断挂起寄存器_Sharemaker的博客-CSDN博客</a></p>
 <h3 id="波特率和比特率"><a href="#波特率和比特率" class="headerlink" title="波特率和比特率"></a>波特率和比特率</h3><p>1 bit&#x2F;s &#x3D; 1 bps</p>
 <p>比特率单位bit&#x2F;s，他表示单位时间传输多少位</p>
 <p>波特率单位bps，他表示单位时间传输多少码元符号（一个码元符号可以代表很多位，根据编码不同变化），即码元传输速率</p>
@@ -208,32 +343,15 @@
 <td>动态库 gcc 进行链接时，动态库的代码不会被打包到可执行程序中，运行时加载；发布程序时需要提供动态库；内存占用小，更新部署发布简单。</td>
 </tr>
 </tbody></table>
-<h3 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a><strong>Makefile</strong></h3><p>1.规则</p>
-<p>目标文件：依赖文件</p>
-<p>【TAB】代码</p>
-<p>当目标文件不存在或者依赖文件比目标文件新时执行代码</p>
-<p>2.通配符</p>
-<p>%.o:%.c</p>
-<p>$@ 表示目标</p>
-<p>$&lt; 表示第一个依赖文件</p>
-<p>$^ 表示所有依赖文件</p>
-<p>3.假想目标 .PHONY: clean</p>
-<p>不会和名为clean的文件冲突</p>
-<p>4.即时变量、延时变量、export</p>
-<p>A :&#x3D; xxx	A的值即刻确定，在定义的时候确定</p>
-<p>B &#x3D; xxx	B的值使用到时才确定</p>
-<p>A :&#x3D; C</p>
-<p>B &#x3D; C</p>
-<p>C &#x3D; 123</p>
-<p>all:</p>
-<p>​	@echo $(A)	#@不会显示命令本身</p>
-<p>​	@echo $(B)	#	A  （此时C未定义）</p>
-<p>​								  B 123</p>
-<p>:&#x3D;	即时变量</p>
-<p>&#x3D;	延时变量</p>
-<p>?&#x3D;	延时变量，如果第一次定义才有效，前面已定义则忽略</p>
-<p>+&#x3D;	附加，取决前面定义是即时变量还是延时变量</p>
-<h3 id="Cmake"><a href="#Cmake" class="headerlink" title="Cmake"></a>Cmake</h3><h2 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h2><ul>
+<h3 id="链接脚本"><a href="#链接脚本" class="headerlink" title="链接脚本"></a>链接脚本</h3><p>链接脚本包含了一些重要的元素和指令，如：</p>
+<ol>
+<li><strong>入口点</strong>（Entry Point）：指定程序的起始执行地址。</li>
+<li><strong>内存布局</strong>（Memory Layout）：定义程序在内存中的分布和布局，包括数据段、代码段、堆栈等的起始地址和大小。</li>
+<li><strong>段描述</strong>（Section Descriptions）：定义各个段的属性、位置和大小，例如代码段、数据段、只读数据段等。</li>
+<li><strong>符号位置和地址分配</strong>：指定全局变量、函数和其他符号在内存中的位置和地址。</li>
+<li><strong>地址对齐和填充</strong>：控制代码和数据在内存中的对齐方式和填充规则。</li>
+</ol>
+<h2 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h2><ul>
 <li><p><strong>高位先行</strong></p>
 <p>SPI、I2C、CAN</p>
 </li>
@@ -302,12 +420,26 @@
 <p>***SCL*(Serial Clock)**– 时钟线。</p>
 <p><strong>2.工作原理</strong></p>
 <p><img src="https://pic1.zhimg.com/80/v2-baf88c70a9d5f9afc4f292d9bfb232d4_720w.webp" alt="img"></p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230921111651426.png" alt="image-20230921111651426"></p>
 <p><strong>启动条件：</strong>当SCL是高电平时，SDA从高电平向低电平切换。</p>
 <p><strong>停止条件：</strong>当SCL是高电平时，SDA由低电平向高电平切换。</p>
 <p><img src="https://pic1.zhimg.com/80/v2-b49f4dee08f4273545450b322d798694_720w.webp" alt="img"></p>
 <p><strong>地址帧：</strong>每个从属设备唯一的7位或10位序列，用于主从设备之间的地址识别。</p>
 <p><strong>读&#x2F;写位：</strong>一位，如果主机是向从机发送数据则为低电平，请求数据则为高电平。</p>
 <p><strong>ACK&#x2F;NACK：</strong>消息中的每个帧后均带有一个ACK&#x2F;NACK位。如果成功接收到地址帧或数据帧，接收设备会返回一个ACK位用于表示确认。</p>
+<p><strong>IIC为什么一定要用开漏输出</strong></p>
+<p>为什么IIC必须要接上拉？</p>
+<p>IIC的从器件（如24C04等），不具备拉高总线的能力，从机控制SDA上的电平，只能通过令SDA接地或不接地来实现输出0或1，而无法通过接地或接VCC来实现输出0或1。这就要求IIC总线上必须是默认上拉的，否则从机无法令SDA为高。</p>
+<p>从另一方面讲：只有开漏上拉，才能满足“线与”逻辑，也即SDA线上多个从机中的任何一个拉低了SDA，就会导致SDA为0。</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230830105513465.png" alt="image-20230830105513465"></p>
+<p>主机为什么使用开漏？主机如果使用了推挽，当主机释放SDA时（令SDA&#x3D;1时），相当于SDA被接通到VCC，这时从机无法控制SDA为0；</p>
+<p>主机如果使用了开漏，当主机释放SDA时（令SDA&#x3D;1时），相当于SDA被悬空上拉到VCC，这时从机可以拉低SDA，使SDA&#x3D;0，也可以释放SDA使SDA&#x3D;1，这样从机才能发数据。</p>
+<p>IIC的SCL和SDA都要求接上拉电阻，也即，只要主机和从机都还没开始干活，那么SCL和SDA就都是空闲的（默认的高电平状态被称为“空闲”，也可以称总线被“释放”），同理，SCL或SDA为low时，就称总线被占用或正忙。IIC协议要求：SCL和SDA必须都是【开漏+上拉】！</p>
+<p>通俗易懂的讲就是</p>
+<ul>
+<li>推挽时主机释放SDA，SDA就会直接连通VCC，从机就没法控制SDA为0</li>
+<li>开漏时主机释放SDA，SDA就会上拉到VCC，从机可以拉低SDA</li>
+</ul>
 <p><strong>3.IO模拟</strong></p>
 <p>主机：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 写一个字节到总线</span><br><span class="line"> * @param self: 对象实例指针</span><br><span class="line"> * @param value: 写到总线的数据</span><br><span class="line"> * @return 从机应答这个Byte,返回True,否则返回False</span><br><span class="line"> */</span><br><span class="line">static Bool TIdpIicCiu98dWriteByte(TIdpIicCiu98d *self, UInt8 value)</span><br><span class="line">&#123;</span><br><span class="line">    Bool result;</span><br><span class="line"></span><br><span class="line">    // 发送高7bit</span><br><span class="line">    for (Int32 i = 7; i &gt; 0; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        self-&gt;OnSetDataPin(self-&gt;user_data, value &amp; (1 &lt;&lt; i));</span><br><span class="line"></span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 发送最低bit</span><br><span class="line">    self-&gt;OnSetDataPin(self-&gt;user_data, value &amp; 1);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, False); // 准备输入,故Data引脚提早变成输入</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    // 读取应答</span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    result = !self-&gt;OnGetDataPin(self-&gt;user_data); </span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, True); // 准备输出,故Data引脚提早变成输出</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 从IIC总线上读取一个字节</span><br><span class="line"> * @param self: 对象实例指针</span><br><span class="line"> * @param ack: 读取完成后是否进行应答</span><br><span class="line"> * @return 读取到的数据</span><br><span class="line"> */</span><br><span class="line">static UInt8 TIdpIicCiu98dReadByte(TIdpIicCiu98d *self, Bool ack)</span><br><span class="line">&#123;</span><br><span class="line">    UInt8 result = 0;</span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, False); // 准备输入,故Data引脚提早变成输入</span><br><span class="line">    // 读取高Bit7..Bit1</span><br><span class="line">    for (Int32 i = 7; i &gt; 0; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line">        result |= (self-&gt;OnGetDataPin(self-&gt;user_data) ? 1 : 0) &lt;&lt; i;</span><br><span class="line"></span><br><span class="line">        self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">        TIdpIicCiu98dDelay(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 读取最低Bit</span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line">    result |= (self-&gt;OnGetDataPin(self-&gt;user_data) ? 1 : 0);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">    </span><br><span class="line">    self-&gt;OnSetDataDir(self-&gt;user_data, True); // 准备输出,故Data引脚提早变成输出</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetDataPin(self-&gt;user_data, !ack);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    // 发送ACK位</span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, True);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    self-&gt;OnSetClockPin(self-&gt;user_data, False);</span><br><span class="line">    TIdpIicCiu98dDelay(self);</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Int32 TIdpIicCiu98dWrite(TIdpIicCiu98d *self, UInt8 slave_addr, const void *data, Int32 size)</span><br><span class="line">&#123;</span><br><span class="line">    Int32 result = kIdpEnumIicErrorCodeParam;</span><br><span class="line"></span><br><span class="line">    if (self != NULL &amp;&amp; data != NULL &amp;&amp; size &gt; 0) &#123;</span><br><span class="line">        TIdpIicCiu98dDoStart(self);</span><br><span class="line"></span><br><span class="line">        if (!TIdpIicCiu98dWriteByte(self, slave_addr &lt;&lt; 1))</span><br><span class="line">            result = kIdpEnumIicErrorCodeNak;</span><br><span class="line">        else&#123;</span><br><span class="line">            const UInt8 *p = (const UInt8 *)data;</span><br><span class="line">            Int32 write_size = size;</span><br><span class="line"></span><br><span class="line">            while (write_size &gt; 0 &amp;&amp; TIdpIicCiu98dWriteByte(self, *p))&#123;</span><br><span class="line">                write_size--;</span><br><span class="line">                p++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            result = write_size == 0 ? size : kIdpEnumIicErrorCodeNak;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TIdpIicCiu98dDoStop(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Int32 TIdpIicCiu98dRead(TIdpIicCiu98d *self, UInt8 slave_addr, void *buf, Int32 size)</span><br><span class="line">&#123;</span><br><span class="line">    Int32 result = kIdpEnumIicErrorCodeParam;</span><br><span class="line"></span><br><span class="line">    if (self != NULL &amp;&amp; buf != NULL &amp;&amp; size &gt; 0) &#123;</span><br><span class="line">        TIdpIicCiu98dDoStart(self);</span><br><span class="line"></span><br><span class="line">        if (!TIdpIicCiu98dWriteByte(self, (slave_addr &lt;&lt; 1) | 1))</span><br><span class="line">            result = kIdpEnumIicErrorCodeNak;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            UInt8 *p = (UInt8 *)buf;</span><br><span class="line">            Int32 read_size = size;</span><br><span class="line"></span><br><span class="line">            read_size--;  // 最后一个字节单独读取</span><br><span class="line">            while (read_size &gt; 0)&#123;</span><br><span class="line">                *p = TIdpIicCiu98dReadByte(self, True);</span><br><span class="line">                p++;</span><br><span class="line">                read_size--;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            *p = TIdpIicCiu98dReadByte(self, False);</span><br><span class="line"></span><br><span class="line">            result = size;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TIdpIicCiu98dDoStop(self);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -358,10 +490,10 @@
 <p>RS232全双工、RS485半双工，RS422全双工、UART全双工、USART异步全双工，同步单线半双工</p>
 <p>UART实现串行数据和并行数据的转换</p>
 <p>UART（TTL电平）与RS232、RS485区别就是电平不一样</p>
-<p>USART异步通信时和UART没区别，同步通信时能提供主动时钟</p>
+<p>USART异步通信时和UART没区别，同步通信时能提供主动时钟，MCU的接口上有时钟管脚，可以驱动外设使其与MCU工作在同一时钟信号之下.</p>
 <h3 id="CAN（控制器局域网）"><a href="#CAN（控制器局域网）" class="headerlink" title="CAN（控制器局域网）"></a>CAN（控制器局域网）</h3><p><strong>距离小于40M:速度有1Mbps，即约128KB&#x2F;s</strong></p>
 <p><strong>距离大于40M小于10KM，速度低于5Kbps</strong></p>
-<p><strong>高位先行</strong></p>
+<p><strong>高位先行</strong>、<strong>异步</strong></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44793491/article/details/107298426">CAN通信知识梳理及在Stm32上的应用（HAL库）</a></p>
 <p><strong>1.硬件</strong></p>
 <p><img src="https://img-blog.csdnimg.cn/23032dbab51c4fd6acee4cf0163d58e3.png?x-oss-process=image#pic_center" alt="img"></p>
@@ -420,9 +552,11 @@
 <p><img src="https://pic4.zhimg.com/80/v2-71cee39427f5321a1672df8c772f1a0b_720w.webp" alt="img"></p>
 <p><strong>常见的错误和异常情况</strong></p>
 <ul>
-<li><strong>错误计数达到上限</strong>：CAN控制器会监测传输过程中的错误，如位错误、传输错误等。当错误发生时，错误计数会递增。当错误计数达到上限时，说明通信质量较差或存在故障。</li>
-<li><strong>总线冲突</strong>：多个CAN节点同时发送消息，导致总线上的冲突。</li>
-<li><strong>帧丢失</strong>：由于各种原因，某些CAN帧可能会丢失。</li>
+<li>位错误：比较输出电平和总线电平（不含填充位），当两电平不一样时所检测到的错误。</li>
+<li>填充错误：在需要位填充的段内，连续检测到6位相同的电平时所检测到的错误。</li>
+<li>CRC错误：从接收到的数据计算出的CRC结果与接收到的CRC顺序不同时所检测到的错误。</li>
+<li>ACK错误：发送单元在ACK槽中检测出隐性电平时所检测到的错误（ACK没被传送过来时所检测到的错误）</li>
+<li>格式错误：检测出与固定格式的位段相反的格式时所检测到的错误</li>
 </ul>
 <p><strong>处理方法</strong></p>
 <ul>
@@ -430,20 +564,18 @@
 <li><strong>错误处理程序</strong>：设置错误处理程序，处理错误计数达到上限的情况。可以根据实际情况采取如降低通信速率、重置错误计数等措施。</li>
 <li>对于总线冲突，通常可以使用<strong>帧优先级和仲裁算法</strong>来解决冲突，确保消息的有序发送。</li>
 </ul>
-<p><strong>多个CAN设备区分和管理</strong></p>
+<p><strong>位时序</strong></p>
+<p>节点间除了使用约定好的波特率进行通讯，也会使用“位同步”的方式来抗干扰、吸收误差，实现对总线电平信号进行正确的采样，确保通讯正常。</p>
+<p>CAN协议把每一个数据位的时序分解成SS段、PTS段、PBS1段和PBS2段，这四段的长度加起来即为一个CAN数据位的长度。分解后最小的时间单位是Tq，而一个完整的位由8~25个Tq组成。</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230915182104613.png" alt="image-20230915182104613"></p>
 <ul>
-<li><strong>设备选择</strong>：每个CAN设备通常都有一个唯一的标识符或地址，可通过该标识符来选择特定的设备进行操作。</li>
-<li><strong>设备管理</strong>：可以使用设备管理结构来记录和跟踪每个CAN设备的状态、设置和缓冲区等信息。</li>
-<li><strong>多路复用</strong>：通过多路复用技术，将多个CAN设备连接到一个CAN控制器上，使其共享相同的硬件资源。</li>
+<li><strong>SS段（SYNC SEG，同步段）</strong></li>
+<li><strong>PTS段（PROP SER，传播时间段）</strong></li>
+<li><strong>PBS1段（PHASE SER1，相位缓冲段）</strong></li>
+<li><strong>PBS2段（PHASE SER2，相位缓冲段）</strong></li>
 </ul>
-<p><strong>保证CAN通信的可靠性和实时性</strong></p>
-<ul>
-<li><strong>硬实时操作系统</strong>：使用硬实时操作系统可以提供更高的实时性保证，确保CAN通信的响应和处理时间满足严格的时间要求。</li>
-<li><strong>优先级管理</strong>：设定CAN消息的优先级，确保高优先级的消息能够更快地发送和接收。可以使用优先级轮转或优先级反转等调度算法来管理消息的优先级。</li>
-<li><strong>错误处理和冗余机制</strong>：实施错误检测、纠正和恢复机制，以确保数据的可靠传输。例如，使用循环冗余校验（CRC）检查数据完整性，使用自动重传请求（ARQ）机制在发生错误时重新发送消息。</li>
-<li><strong>时间同步</strong>：在实时性要求较高的系统中，进行时间同步可以确保CAN节点之间的时间一致性，进一步提升通信的可靠性和实时性。</li>
-<li><strong>严格的延迟控制</strong>：通过有效的系统设计和优化，减小CAN消息在系统中的传输延迟，确保实时性要求得到满足。</li>
-</ul>
+<p><strong>位填充</strong></p>
+<p>位填充是为防止突发错误而设定的功能，当同样的电平持续5位时则添加一个位的反型数据。只有<strong>数据帧</strong>才会用到位填充。</p>
 <h3 id="USB"><a href="#USB" class="headerlink" title="USB"></a>USB</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/q15873584778/article/details/128095100?spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-16-128095100-blog-85759974.235%5Ev38%5Epc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-16-128095100-blog-85759974.235%5Ev38%5Epc_relevant_sort_base3&utm_relevant_index=21">USB协议入门解析_usb协议解析_</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44760112/article/details/126088772">usb 传输协议_usb协议_秋绘の枫的博客-CSDN博客</a></p>
 <p><strong>低位先行</strong></p>
@@ -451,6 +583,29 @@
 <p>1、低速模式，1.5Mbps，换算成字节：187KB&#x2F;S;</p>
 <p>2、全速模式，12Mbps，换算成字节：1.5MB&#x2F;S;</p>
 <p>3、高速模式，480Mbps，换算成字节：60MB&#x2F;S，实际不超过25MB&#x2F;S。</p>
+<p>USB类分为四大类</p>
+<ul>
+<li><p>HID</p>
+<p>主要用于人机交互设备，外部设备通过USB连接后实现对计算机的控制，比如鼠标、键盘、摇杆、方向盘等等；</p>
+</li>
+<li><p>MSC</p>
+<p>大容量USB设备，依赖于USB2.0，3.0协议提供的高速传输速率，比如U盘、移动硬盘等；</p>
+</li>
+<li><p>CDC</p>
+<p>USB组织定义的一类专门给各种通讯设备使用的USB子类，这是一个非常大的USB子类协议簇，根据USB类所针对的设备不同划分为不同的通讯模型（如USB转串口），比如有线网卡、无线网卡、蓝牙、扩展坞(USB HUB)类设备等；</p>
+</li>
+<li><p>Audio&#x2F;Video</p>
+<p>用于传输声音和视频等信号、比如USB音响和摄像头等；</p>
+</li>
+</ul>
+<p>USB3.0和2.0区别</p>
+<ol>
+<li>数据传输方式：USB 2.0使用基于<strong>轮询</strong>的传输方式，即主机控制器定期查询每个设备是否有数据要传输。而USB 3.0引入了<strong>流式传输</strong>（Streaming Transfer）的概念，它允许设备和主机之间进行更高效的数据流传输，减少了传输延迟。</li>
+<li>数据包结构：USB 2.0使用了<strong>固定长度</strong>的数据包结构，每个数据包包含数据和控制信息。USB 3.0采用了更灵活的数据包结构，支持<strong>可变长度</strong>的数据包，使得数据传输更高效。</li>
+<li>管理方式：USB 3.0引入了更复杂的管理机制，例如<strong>上行和下行传输的分离管理、更高级别的错误检测和纠正机制</strong>等。这些改进提高了数据传输的可靠性和性能。</li>
+<li>新的传输模式：USB 3.0引入了新的传输模式，包括<strong>超级速度</strong>传输模式（SuperSpeed）和**超级速度+**传输模式（SuperSpeed+）。这些模式提供了更高的传输速度和增强的功能，如更大的最大传输单元（Max. Transfer Unit）和更低的传输延迟。</li>
+<li>带宽分配：USB 3.0在协议上支持更灵活的带宽分配，可以根据需求<strong>动态分配带宽</strong>给不同的设备和传输流。</li>
+</ol>
 <p>硬件：</p>
 <p>USB芯片也分为Controller部分和PHY部分。Controller部分主要实现USB的协议和控制。内部逻辑主要有MAC层、CSR层和FIFO控制层，还有其他低功耗管理之类层次。MAC实现按USB协议进行数据包打包和解包，并把数据按照UTMI总线格式发送给PHY（USB3.0为PIPE）。CSR层进行寄存器控制，软件对USB芯片的控制就是通过CSR寄存器，这部分和CPU进行交互访问，主要作为Slave通过AXI或者AHB进行交互。FIFO控制层主要是和DDR进行数据交互，控制USB从DDR搬运数据的通道，主要作为Master通过AXI&#x2F;AHB进行交互。PHY部分功能主要实现并转串的功能，把UTMI或者PIPE口的并行数据转换成串行数据，再通过差分数据线输出到芯片外部。</p>
 <p>USB四层描述符，每个USB设备都可以有多个配置，配置就相当于功能，一个配置可以有多个接口，接口是逻辑上的概念，接口之间隔离互不干扰。一个接口可以有多个端点，它是数据交互的实体，相当于缓冲区，存放和发送usb数据，端点是一对一连接的，只支持一个方向的数据传输。端点0每个设备都拥有，用来对逻辑设备进行配置，端点0在上电和接入的时候就被配置。</p>
@@ -551,6 +706,7 @@
 <h4 id="MSC"><a href="#MSC" class="headerlink" title="MSC"></a>MSC</h4><p><a target="_blank" rel="noopener" href="https://www.likecs.com/show-204184762.html">USB bulk设备中的CBW和CSW - 爱码网 (likecs.com)</a></p>
 <p>1.存储介质遵循<strong>SCSI</strong>协议</p>
 <p>2.Host和Device间数据通讯协议是Bulk-only Transport，即<strong>BOT</strong></p>
+<p>❀<a target="_blank" rel="noopener" href="https://www.usbzh.com/article/detail-608.html">BOT 简介 Bulk-Only Transport - USB中文网 (usbzh.com)</a></p>
 <p>有三种类型的数据在USB和设备之间传送，<strong>CBW、CSW和普通数据</strong></p>
 <p><strong>CBW</strong>，即命令块包，是从USB Host发送到设备的命令，里面包含着SCSI指令集，设备需要从CBW提取出命令。命令可能为<strong>写入、读取和查询</strong>。</p>
 <p><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/doc/EDOC1000149331/ec501220">SCSI命令集 - ES3000 V3 SAS SSD 用户指南 07 - 华为 (huawei.com)</a></p>
@@ -565,6 +721,32 @@
 <p>URB就相当于数据传输时使用到的句柄，包含状态、管道等重要信息。</p>
 <p><strong>URB 处理流程</strong></p>
 <p>（1）usb 设备驱动程序创建并初始化一个访问特定usb设备特定端点的 urb，并提交给 usb core；<br>（2）usb core 提交该 urb 到 usb 主控制器驱动程序；<br>（3）usb 主控制器驱动程序根据 urb 描述的信息，来访问 usb 设备；<br>（4）当设备访问结束后，usb 主控制器驱动程序通知 usb core（调用这个函数usb_complete_t complete;）然后其再通知usb设备驱动程序。</p>
+<h4 id="USB速率（高速）"><a href="#USB速率（高速）" class="headerlink" title="USB速率（高速）"></a>USB速率（高速）</h4><ul>
+<li><p>HID</p>
+<p>全速最快1ms64字节，能到1M&#x2F;s很不错了，高速us级别中断传输1024字节，理论上7M&#x2F;s</p>
+</li>
+<li><p>MSC</p>
+<p><img src="E:\研究生学习\毕业相关\工作应聘\images\image-20230916124531936.png" alt="image-20230916124531936"></p>
+<p>通过读写文件所用时间计算，写15M&#x2F;s，读42M&#x2F;s</p>
+</li>
+<li><p>CDC</p>
+<p>VCP虚拟串口22M&#x2F;s，通过设定总数据量和传输时间计算</p>
+</li>
+</ul>
+<p>传输速度慢的原因</p>
+<ul>
+<li><p>协议限制</p>
+</li>
+<li><p>配置问题</p>
+<p>HID配置描述符中断时间间隔太长</p>
+</li>
+<li><p>其他干扰</p>
+<p>系统滴答中断优先级比USB高，频率很高（10ms以内）会影响USB速度</p>
+</li>
+<li><p>上位机因素</p>
+<p>上位机发送数据慢</p>
+</li>
+</ul>
 <h3 id="检测错误的协议类型"><a href="#检测错误的协议类型" class="headerlink" title="检测错误的协议类型"></a>检测错误的协议类型</h3><h4 id="奇偶校验"><a href="#奇偶校验" class="headerlink" title="奇偶校验"></a>奇偶校验</h4><ul>
 <li><p>奇校验</p>
 <p>判断数据当中1的个数是否为奇数，具体为统计原始数据1的个数，如果为奇数在最后加0，如果是偶数在最后加1</p>
@@ -626,7 +808,7 @@
 <p>tips：</p>
 <p>1.已烧录的sd卡连接PC机，ubuntu会自动挂载sd卡的二区文件系统</p>
 <p>2.sdb1分区将挂载为&#x2F;boot（所以更新内核镜像和设备树可以通过修改&#x2F;boot方式）</p>
-<h4 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h4><ul>
+<h4 id="启动方式-1"><a href="#启动方式-1" class="headerlink" title="启动方式"></a>启动方式</h4><ul>
 <li><strong>SD卡启动</strong></li>
 </ul>
 <p>在 Ubuntu 下烧写 SD&#x2F;TF 卡，可烧写整个（Uboot、内核、设备树、文件系统），也可单独烧写Uboot、内核、设备树。</p>
@@ -1101,7 +1283,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/favicon.ico" alt="给个机会"></a>
+    <a href="/"><img src="/favicon.ico" alt="名的博客"></a>
   </div>
   
   <ul class="nav nav-main">
